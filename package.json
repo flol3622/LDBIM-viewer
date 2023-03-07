@@ -9,9 +9,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@xeokit/xeokit-sdk": "^2.3.9",
     "next": "^13.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "xeokit-react": "file:xeokit-react/src",
     "zod": "^3.20.6"
   },
   "devDependencies": {
