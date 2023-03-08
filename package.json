@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@xeokit/xeokit-sdk": "^2.3.9",
     "next": "^13.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

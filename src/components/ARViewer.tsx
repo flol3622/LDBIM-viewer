@@ -1,4 +1,4 @@
-import Viewer from "@xeokit/xeokit-sdk/src/viewer/Viewer";
+import { Viewer } from "@xeokit/xeokit-sdk";
 
 type ARViewerProps = {
   src?: string;
