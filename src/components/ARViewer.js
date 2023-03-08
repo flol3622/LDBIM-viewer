@@ -11,6 +11,18 @@ export default class ARViewer extends Component {
   componentDidMount() {
     const viewer = this.setViewer();
 
+    const loader = new GLTFLoaderPlugin(viewer);
+
+    const model = loader.load({
+      id: "lol",
+      src: "https://raw.githubusercontent.com/xeokit/xeokit-sdk/master/assets/models/gltf/Box/glTF-Embedded/Box.gltf",
+      edges: true,
+    });
+
+    model.on("loaded", () => {
+      viewer.cameraFlight.jumpTo(model);
+    });
+
     new NavCubePlugin(viewer, {
       canvasId: "myNavCubeCanvas",
       visible: true,
