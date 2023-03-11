@@ -36,9 +36,6 @@ export default function ARViewer(props: { height: string }) {
       console.log("testje", matrix);
     });
 
-    return () => {
-      viewer.destroy();
-    };
   }, []);
 
   return (
