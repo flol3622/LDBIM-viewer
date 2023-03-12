@@ -1,34 +1,34 @@
-@prefix fog: <https://w3id.org/fog#> .
-@prefix omg: <https://w3id.org/omg#> .
-@prefix bot: <https://w3id.org/bot#> .
-@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix fog: <https://w3id.org/fog#>.
+@prefix omg: <https://w3id.org/omg#>.
+@prefix bot: <https://w3id.org/bot#>.
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#>.
 
-<http://flupke.archi/room1> a bot:Zone ;
-    bot:containsElement <http://flupke.archi/coneOBJ> ;
-    bot:containsElement <http://flupke.archi/coneOBJlit> ;
-    bot:containsElement <http://flupke.archi/cubeGLTF> ;
-    bot:containsElement <http://flupke.archi/cubeGLTF2> ;
-    bot:containsElement <http://flupke.archi/cubeGLTFlit> ;
-    bot:containsElement <http://flupke.archi/IcosphereSTL> ;
-    bot:containsElement <http://flupke.archi/IcosphereSTLlit> ;
+<http://flupke.archi/room1> a bot:Zone;
+    bot:containsElement <http://flupke.archi/coneOBJ>;
+    bot:containsElement <http://flupke.archi/coneOBJlit>;
+    bot:containsElement <http://flupke.archi/cubeGLTF>;
+    bot:containsElement <http://flupke.archi/cubeGLTF2>;
+    bot:containsElement <http://flupke.archi/cubeGLTFlit>;
+    bot:containsElement <http://flupke.archi/IcosphereSTL>;
+    bot:containsElement <http://flupke.archi/IcosphereSTLlit>;
 
-<http://flupke.archi/coneOBJ> a bot:Element ;
-    fog:asObj_v3.0-obj "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/coneOBJ.obj"^^xsd:anyURI .
+<http://flupke.archi/coneOBJ> a bot:Element;
+    fog:asObj_v3.0-obj "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/coneOBJ.obj"^^xsd:anyURI;
 
-<http://flupke.archi/cubeGLTF> a bot:Element ;
-    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf"^^xsd:anyURI .
+<http://flupke.archi/cubeGLTF> a bot:Element;
+    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf"^^xsd:anyURI;
 
-<http://flupke.archi/cubeGLTF2> a bot:Element ;
-    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF2.gltf"^^xsd:anyURI .
+<http://flupke.archi/cubeGLTF2> a bot:Element;
+    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF2.gltf"^^xsd:anyURI;
 
-<http://flupke.archi/IcosphereSTL> a bot:Element ;
-    fog:asStl_v1.0-ascii "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/IcosphereSTL.stl"^^xsd:anyURI .
+<http://flupke.archi/IcosphereSTL> a bot:Element;
+    fog:asStl_v1.0-ascii "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/IcosphereSTL.stl"^^xsd:anyURI;
 
-<http://flupke.archi/coneOBJlit> a bot:Element ;
+<http://flupke.archi/coneOBJlit> a bot:Element;
     fog:asObj_v3.0-obj """# Blender 3.4.1
 # www.blender.org
 mtllib coneOBJlit.mtl
@@ -199,9 +199,9 @@ f 30/59/30 33/65/30 31/62/30
 f 1/1/31 2/4/31 3/6/31 4/8/31 5/10/31 6/12/31 7/14/31 8/16/31 9/18/31 10/20/31 11/22/31 12/24/31 13/26/31 14/28/31 15/30/31 16/32/31 17/34/31 18/36/31 19/38/31 20/40/31 21/42/31 22/44/31 23/46/31 24/48/31 25/50/31 26/52/31 27/54/31 28/56/31 29/58/31 30/60/31 31/61/31 32/63/31
 f 31/62/32 33/65/32 32/64/32
 f 32/64/33 33/65/33 1/2/33
-"""^^xsd:string .
+"""^^xsd:string;
 
-<http://flupke.archi/cubeGLTFlit> a bot:Element ;
+<http://flupke.archi/cubeGLTFlit> a bot:Element;
     fog:asGltf_v1.0-gltf '''{
     "asset" : {
         "generator" : "Khronos glTF Blender I/O v3.4.50",
@@ -333,9 +333,9 @@ f 32/64/33 33/65/33 1/2/33
         }
     ]
 }
-'''^^xsd:string .
+'''^^xsd:string;
 
-<http://flupke.archi/IcosphereSTLlit> a bot:Element ;
+<http://flupke.archi/IcosphereSTLlit> a bot:Element;
     fog:asStl_v1.0-ascii """solid Exported from Blender-3.4.1
 facet normal 0.187597 -0.577354 -0.794651
 outer loop
@@ -478,4 +478,4 @@ vertex 3.953624 5.508770 1.021519
 endloop
 endfacet
 endsolid Exported from Blender-3.4.1
-"""^^xsd:string .
+"""^^xsd:string;
