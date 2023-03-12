@@ -16,7 +16,7 @@ export default function ARViewer(props: { height: string }) {
 
     const model = loader.load({
       id: "lol",
-      src: "https://raw.githubusercontent.com/xeokit/xeokit-sdk/master/assets/models/gltf/Box/glTF-Embedded/Box.gltf",
+      src: "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf",
       edges: true,
     });
 

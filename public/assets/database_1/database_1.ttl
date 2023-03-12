@@ -1,0 +1,481 @@
+@prefix fog: <https://w3id.org/fog#> .
+@prefix omg: <https://w3id.org/omg#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+<http://flupke.archi/room1> a bot:Zone ;
+    bot:containsElement <http://flupke.archi/coneOBJ> ;
+    bot:containsElement <http://flupke.archi/coneOBJlit> ;
+    bot:containsElement <http://flupke.archi/cubeGLTF> ;
+    bot:containsElement <http://flupke.archi/cubeGLTF2> ;
+    bot:containsElement <http://flupke.archi/cubeGLTFlit> ;
+    bot:containsElement <http://flupke.archi/IcosphereSTL> ;
+    bot:containsElement <http://flupke.archi/IcosphereSTLlit> ;
+
+<http://flupke.archi/coneOBJ> a bot:Element ;
+    fog:asObj_v3.0-obj "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/coneOBJ.obj"^^xsd:anyURI .
+
+<http://flupke.archi/cubeGLTF> a bot:Element ;
+    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf"^^xsd:anyURI .
+
+<http://flupke.archi/cubeGLTF2> a bot:Element ;
+    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF2.gltf"^^xsd:anyURI .
+
+<http://flupke.archi/IcosphereSTL> a bot:Element ;
+    fog:asStl_v1.0-ascii "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/IcosphereSTL.stl"^^xsd:anyURI .
+
+<http://flupke.archi/coneOBJlit> a bot:Element ;
+    fog:asObj_v3.0-obj """# Blender 3.4.1
+# www.blender.org
+mtllib coneOBJlit.mtl
+o ConeOBJlit
+v 6.154128 0.647678 0.648610
+v 6.134913 0.452588 0.648610
+v 6.078008 0.264995 0.648610
+v 5.985598 0.092108 0.648610
+v 5.861235 -0.059429 0.648610
+v 5.709698 -0.183791 0.648610
+v 5.536811 -0.276201 0.648610
+v 5.349218 -0.333107 0.648610
+v 5.154128 -0.352322 0.648610
+v 4.959038 -0.333107 0.648610
+v 4.771445 -0.276201 0.648610
+v 4.598558 -0.183791 0.648610
+v 4.447021 -0.059429 0.648610
+v 4.322659 0.092108 0.648610
+v 4.230248 0.264995 0.648610
+v 4.173343 0.452588 0.648610
+v 4.154128 0.647678 0.648610
+v 4.173343 0.842769 0.648610
+v 4.230248 1.030362 0.648610
+v 4.322659 1.203249 0.648610
+v 4.447021 1.354785 0.648610
+v 4.598558 1.479148 0.648610
+v 4.771445 1.571558 0.648610
+v 4.959038 1.628464 0.648610
+v 5.154128 1.647678 0.648610
+v 5.349218 1.628464 0.648610
+v 5.536811 1.571558 0.648610
+v 5.709698 1.479148 0.648610
+v 5.861235 1.354785 0.648610
+v 5.985598 1.203249 0.648610
+v 6.078008 1.030362 0.648610
+v 6.134913 0.842769 0.648610
+v 5.154128 0.647678 2.648611
+vn 0.8910 -0.0878 0.4455
+vn 0.8567 -0.2599 0.4455
+vn 0.7896 -0.4220 0.4455
+vn 0.6921 -0.5680 0.4455
+vn 0.5680 -0.6921 0.4455
+vn 0.4220 -0.7896 0.4455
+vn 0.2599 -0.8567 0.4455
+vn 0.0878 -0.8910 0.4455
+vn -0.0878 -0.8910 0.4455
+vn -0.2599 -0.8567 0.4455
+vn -0.4220 -0.7896 0.4455
+vn -0.5680 -0.6921 0.4455
+vn -0.6921 -0.5680 0.4455
+vn -0.7896 -0.4220 0.4455
+vn -0.8567 -0.2599 0.4455
+vn -0.8910 -0.0878 0.4455
+vn -0.8910 0.0878 0.4455
+vn -0.8567 0.2599 0.4455
+vn -0.7896 0.4220 0.4455
+vn -0.6921 0.5680 0.4455
+vn -0.5680 0.6921 0.4455
+vn -0.4220 0.7896 0.4455
+vn -0.2599 0.8567 0.4455
+vn -0.0878 0.8910 0.4455
+vn 0.0878 0.8910 0.4455
+vn 0.2599 0.8567 0.4455
+vn 0.4220 0.7896 0.4455
+vn 0.5680 0.6921 0.4455
+vn 0.6921 0.5680 0.4455
+vn 0.7896 0.4220 0.4455
+vn -0.0000 -0.0000 -1.0000
+vn 0.8567 0.2599 0.4455
+vn 0.8910 0.0878 0.4455
+vt 0.750000 0.490000
+vt 0.250000 0.490000
+vt 0.296822 0.485388
+vt 0.796822 0.485388
+vt 0.341844 0.471731
+vt 0.841844 0.471731
+vt 0.383337 0.449553
+vt 0.883337 0.449553
+vt 0.419706 0.419706
+vt 0.919706 0.419706
+vt 0.449553 0.383337
+vt 0.949553 0.383337
+vt 0.471731 0.341844
+vt 0.971731 0.341844
+vt 0.485388 0.296822
+vt 0.985388 0.296822
+vt 0.490000 0.250000
+vt 0.990000 0.250000
+vt 0.485388 0.203178
+vt 0.985388 0.203178
+vt 0.471731 0.158156
+vt 0.971731 0.158156
+vt 0.449553 0.116663
+vt 0.949553 0.116663
+vt 0.419706 0.080294
+vt 0.919706 0.080294
+vt 0.383337 0.050447
+vt 0.883337 0.050447
+vt 0.341844 0.028269
+vt 0.841844 0.028269
+vt 0.296822 0.014612
+vt 0.796822 0.014612
+vt 0.250000 0.010000
+vt 0.750000 0.010000
+vt 0.203178 0.014612
+vt 0.703178 0.014612
+vt 0.158156 0.028269
+vt 0.658156 0.028269
+vt 0.116663 0.050447
+vt 0.616663 0.050447
+vt 0.080294 0.080294
+vt 0.580294 0.080294
+vt 0.050447 0.116663
+vt 0.550447 0.116663
+vt 0.028269 0.158156
+vt 0.528269 0.158156
+vt 0.014612 0.203178
+vt 0.514612 0.203178
+vt 0.010000 0.250000
+vt 0.510000 0.250000
+vt 0.014612 0.296822
+vt 0.514612 0.296822
+vt 0.028269 0.341844
+vt 0.528269 0.341844
+vt 0.050447 0.383337
+vt 0.550447 0.383337
+vt 0.080294 0.419706
+vt 0.580294 0.419706
+vt 0.116663 0.449553
+vt 0.616663 0.449553
+vt 0.658156 0.471731
+vt 0.158156 0.471731
+vt 0.703178 0.485388
+vt 0.203178 0.485388
+vt 0.250000 0.250000
+s 0
+usemtl Material.001
+f 1/2/1 33/65/1 2/3/1
+f 2/3/2 33/65/2 3/5/2
+f 3/5/3 33/65/3 4/7/3
+f 4/7/4 33/65/4 5/9/4
+f 5/9/5 33/65/5 6/11/5
+f 6/11/6 33/65/6 7/13/6
+f 7/13/7 33/65/7 8/15/7
+f 8/15/8 33/65/8 9/17/8
+f 9/17/9 33/65/9 10/19/9
+f 10/19/10 33/65/10 11/21/10
+f 11/21/11 33/65/11 12/23/11
+f 12/23/12 33/65/12 13/25/12
+f 13/25/13 33/65/13 14/27/13
+f 14/27/14 33/65/14 15/29/14
+f 15/29/15 33/65/15 16/31/15
+f 16/31/16 33/65/16 17/33/16
+f 17/33/17 33/65/17 18/35/17
+f 18/35/18 33/65/18 19/37/18
+f 19/37/19 33/65/19 20/39/19
+f 20/39/20 33/65/20 21/41/20
+f 21/41/21 33/65/21 22/43/21
+f 22/43/22 33/65/22 23/45/22
+f 23/45/23 33/65/23 24/47/23
+f 24/47/24 33/65/24 25/49/24
+f 25/49/25 33/65/25 26/51/25
+f 26/51/26 33/65/26 27/53/26
+f 27/53/27 33/65/27 28/55/27
+f 28/55/28 33/65/28 29/57/28
+f 29/57/29 33/65/29 30/59/29
+f 30/59/30 33/65/30 31/62/30
+f 1/1/31 2/4/31 3/6/31 4/8/31 5/10/31 6/12/31 7/14/31 8/16/31 9/18/31 10/20/31 11/22/31 12/24/31 13/26/31 14/28/31 15/30/31 16/32/31 17/34/31 18/36/31 19/38/31 20/40/31 21/42/31 22/44/31 23/46/31 24/48/31 25/50/31 26/52/31 27/54/31 28/56/31 29/58/31 30/60/31 31/61/31 32/63/31
+f 31/62/32 33/65/32 32/64/32
+f 32/64/33 33/65/33 1/2/33
+"""^^xsd:string .
+
+<http://flupke.archi/cubeGLTFlit> a bot:Element ;
+    fog:asGltf_v1.0-gltf '''{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.4.50",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "CubeGLTFlit",
+            "scale" : [
+                1,
+                2.830599784851074,
+                1
+            ],
+            "translation" : [
+                -2.4681220054626465,
+                1.1025447845458984,
+                4.2285356521606445
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "Material.001",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.8000000715255737,
+                    0,
+                    0.00044070236617699265,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Cube.002",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "TEXCOORD_0" : 1,
+                        "NORMAL" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 24,
+            "max" : [
+                1,
+                1,
+                1
+            ],
+            "min" : [
+                -1,
+                -1,
+                -1
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 24,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 24,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 36,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 288,
+            "byteOffset" : 0,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 192,
+            "byteOffset" : 288,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 288,
+            "byteOffset" : 480,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 72,
+            "byteOffset" : 768,
+            "target" : 34963
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 840,
+            "uri" : "data:application/octet-stream;base64,AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgD8AAIC/AACAPwAAgD8AAIC/AACAPwAAgD8AAIC/AAAAPgAAgD4AAMA+AAAAAAAAwD4AAIA/AAAgPwAAAAAAACA/AACAPwAAYD8AAIA+AAAAPgAAAD8AAMA+AABAPwAAwD4AAEA/AAAgPwAAQD8AACA/AABAPwAAYD8AAAA/AADAPgAAgD4AAMA+AACAPgAAwD4AAIA+AAAgPwAAgD4AACA/AACAPgAAID8AAIA+AADAPgAAAD8AAMA+AAAAPwAAwD4AAAA/AAAgPwAAAD8AACA/AAAAPwAAID8AAAA/AAAAAAAAgL8AAACAAAAAAAAAAAAAAIA/AACAvwAAAAAAAACAAAAAAAAAAAAAAIA/AACAvwAAAAAAAACAAAAAAAAAgD8AAACAAAAAAAAAgL8AAACAAACAvwAAAAAAAACAAAAAAAAAAAAAAIC/AACAvwAAAAAAAACAAAAAAAAAAAAAAIC/AAAAAAAAgD8AAACAAAAAAAAAgL8AAACAAAAAAAAAAAAAAIA/AACAPwAAAAAAAACAAAAAAAAAAAAAAIA/AAAAAAAAgD8AAACAAACAPwAAAAAAAACAAAAAAAAAgL8AAACAAAAAAAAAAAAAAIC/AACAPwAAAAAAAACAAAAAAAAAAAAAAIC/AAAAAAAAgD8AAACAAACAPwAAAAAAAACAAgAEAAkAAgAJAAcACAAKABUACAAVABMAFAAXABEAFAARAA4ADQAPAAMADQADAAEABgASAAwABgAMAAAAFgALAAUAFgAFABAA"
+        }
+    ]
+}
+'''^^xsd:string .
+
+<http://flupke.archi/IcosphereSTLlit> a bot:Element ;
+    fog:asStl_v1.0-ascii """solid Exported from Blender-3.4.1
+facet normal 0.187597 -0.577354 -0.794651
+outer loop
+vertex 3.953624 5.508770 -2.716417
+vertex 5.306008 4.526217 -1.683279
+vertex 3.437069 3.918951 -1.683279
+endloop
+endfacet
+facet normal 0.607065 0.000000 -0.794652
+outer loop
+vertex 5.306008 4.526217 -1.683279
+vertex 3.953624 5.508770 -2.716417
+vertex 5.306008 6.491323 -1.683279
+endloop
+endfacet
+facet normal -0.491122 -0.356829 -0.794652
+outer loop
+vertex 3.953624 5.508770 -2.716417
+vertex 3.437069 3.918951 -1.683279
+vertex 2.281972 5.508770 -1.683279
+endloop
+endfacet
+facet normal -0.491122 0.356829 -0.794652
+outer loop
+vertex 3.953624 5.508770 -2.716417
+vertex 2.281972 5.508770 -1.683279
+vertex 3.437069 7.098589 -1.683279
+endloop
+endfacet
+facet normal 0.187597 0.577354 -0.794651
+outer loop
+vertex 3.953624 5.508770 -2.716417
+vertex 3.437069 7.098589 -1.683279
+vertex 5.306008 6.491323 -1.683279
+endloop
+endfacet
+facet normal 0.982246 0.000000 -0.187597
+outer loop
+vertex 5.306008 4.526217 -1.683279
+vertex 5.306008 6.491323 -1.683279
+vertex 5.625275 5.508770 -0.011618
+endloop
+endfacet
+facet normal 0.303536 -0.934171 -0.187589
+outer loop
+vertex 3.437069 3.918951 -1.683279
+vertex 5.306008 4.526217 -1.683279
+vertex 4.470178 3.918951 -0.011618
+endloop
+endfacet
+facet normal -0.794649 -0.577360 -0.187587
+outer loop
+vertex 2.281972 5.508770 -1.683279
+vertex 3.437069 3.918951 -1.683279
+vertex 2.601238 4.526217 -0.011618
+endloop
+endfacet
+facet normal -0.794649 0.577359 -0.187587
+outer loop
+vertex 3.437069 7.098589 -1.683279
+vertex 2.281972 5.508770 -1.683279
+vertex 2.601238 6.491323 -0.011618
+endloop
+endfacet
+facet normal 0.303536 0.934171 -0.187589
+outer loop
+vertex 5.306008 6.491323 -1.683279
+vertex 3.437069 7.098589 -1.683279
+vertex 4.470178 7.098589 -0.011618
+endloop
+endfacet
+facet normal 0.794649 -0.577360 0.187587
+outer loop
+vertex 5.306008 4.526217 -1.683279
+vertex 5.625275 5.508770 -0.011618
+vertex 4.470178 3.918951 -0.011618
+endloop
+endfacet
+facet normal -0.303536 -0.934171 0.187589
+outer loop
+vertex 3.437069 3.918951 -1.683279
+vertex 4.470178 3.918951 -0.011618
+vertex 2.601238 4.526217 -0.011618
+endloop
+endfacet
+facet normal -0.982246 0.000000 0.187597
+outer loop
+vertex 2.281972 5.508770 -1.683279
+vertex 2.601238 4.526217 -0.011618
+vertex 2.601238 6.491323 -0.011618
+endloop
+endfacet
+facet normal -0.303536 0.934171 0.187590
+outer loop
+vertex 3.437069 7.098589 -1.683279
+vertex 2.601238 6.491323 -0.011618
+vertex 4.470178 7.098589 -0.011618
+endloop
+endfacet
+facet normal 0.794649 0.577360 0.187587
+outer loop
+vertex 5.306008 6.491323 -1.683279
+vertex 4.470178 7.098589 -0.011618
+vertex 5.625275 5.508770 -0.011618
+endloop
+endfacet
+facet normal 0.491122 -0.356829 0.794652
+outer loop
+vertex 4.470178 3.918951 -0.011618
+vertex 5.625275 5.508770 -0.011618
+vertex 3.953624 5.508770 1.021519
+endloop
+endfacet
+facet normal -0.187597 -0.577353 0.794651
+outer loop
+vertex 2.601238 4.526217 -0.011618
+vertex 4.470178 3.918951 -0.011618
+vertex 3.953624 5.508770 1.021519
+endloop
+endfacet
+facet normal -0.607065 0.000000 0.794652
+outer loop
+vertex 2.601238 6.491323 -0.011618
+vertex 2.601238 4.526217 -0.011618
+vertex 3.953624 5.508770 1.021519
+endloop
+endfacet
+facet normal -0.187597 0.577353 0.794651
+outer loop
+vertex 4.470178 7.098589 -0.011618
+vertex 2.601238 6.491323 -0.011618
+vertex 3.953624 5.508770 1.021519
+endloop
+endfacet
+facet normal 0.491122 0.356829 0.794652
+outer loop
+vertex 5.625275 5.508770 -0.011618
+vertex 4.470178 7.098589 -0.011618
+vertex 3.953624 5.508770 1.021519
+endloop
+endfacet
+endsolid Exported from Blender-3.4.1
+"""^^xsd:string .
