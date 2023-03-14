@@ -38,15 +38,20 @@ flupke:IcosphereSTL omg:hasGeometry flupke:IcosphereSTL_geometry-1 ;
 flupke:IcosphereSTLlit omg:hasGeometry flupke:IcosphereSTLlit_geometry-1 ;
     rdf:type bot:Element .
 
-flupke:coneOBJ_geometry-1 fog:asObj_v3.0-obj "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/coneOBJ.obj"^^xsd:anyURI .
+flupke:coneOBJ_geometry-1 rdf:type omg:Geometry ;
+    fog:asObj_v3.0-obj "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/coneOBJ.obj"^^xsd:anyURI .
 
-flupke:cubeGLTF_geometry-1 fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf"^^xsd:anyURI .
+flupke:cubeGLTF_geometry-1 rdf:type omg:Geometry ;
+    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf"^^xsd:anyURI .
 
-flupke:cubeGLTF2_geometry-1 fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF2.gltf"^^xsd:anyURI .
+flupke:cubeGLTF2_geometry-1 rdf:type omg:Geometry ;
+    fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF2.gltf"^^xsd:anyURI .
 
-flupke:IcosphereSTL_geometry-1 fog:asStl_v1.0-ascii "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/IcosphereSTL.stl"^^xsd:anyURI .
+flupke:IcosphereSTL_geometry-1 rdf:type omg:Geometry ;
+    fog:asStl_v1.0-ascii "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/IcosphereSTL.stl"^^xsd:anyURI .
 
-flupke:coneOBJlit_geometry-1 fog:asObj_v3.0-obj """# Blender 3.4.1
+flupke:coneOBJlit_geometry-1 rdf:type omg:Geometry ;
+    fog:asObj_v3.0-obj """# Blender 3.4.1
 # www.blender.org
 mtllib coneOBJlit.mtl
 o ConeOBJlit
@@ -218,7 +223,8 @@ f 31/62/32 33/65/32 32/64/32
 f 32/64/33 33/65/33 1/2/33
 """^^xsd:string .
 
-flupke:cubeGLTFlit_geometry-1 fog:asGltf_v1.0-gltf '''{
+flupke:cubeGLTFlit_geometry-1 rdf:type omg:Geometry ;
+    fog:asGltf_v1.0-gltf '''{
     "asset" : {
         "generator" : "Khronos glTF Blender I/O v3.4.50",
         "version" : "2.0"
@@ -351,7 +357,8 @@ flupke:cubeGLTFlit_geometry-1 fog:asGltf_v1.0-gltf '''{
 }
 '''^^xsd:string .
 
-flupke:IcosphereSTLlit_geometry-1 fog:asStl_v1.0-ascii """solid Exported from Blender-3.4.1
+flupke:IcosphereSTLlit_geometry-1 rdf:type omg:Geometry ;
+    fog:asStl_v1.0-ascii """solid Exported from Blender-3.4.1
 facet normal 0.187597 -0.577354 -0.794651
 outer loop
 vertex 3.953624 5.508770 -2.716417
