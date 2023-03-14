@@ -7,34 +7,7 @@ import { location } from "~/atoms";
 export default function ARViewer(props: { height: string }) {
   const setCameraPosition = useSetRecoilState(location);
 
-  async function getGeometry() {
-    const sparql = `
-    PREFIX bot: <https://w3id.org/bot#>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX fog: <https://w3id.org/fog#>
-    PREFIX omg: <https://w3id.org/omg#>
-    PREFIX flupke: <http://flupke.archi/>
-    select * where { 
-      flupke:cubeGLTF ?p ?o.
-    } limit 10 
-    `;
-
-    const myFetcher = new SparqlEndpointFetcher();
-
-    const bindingsStream = await myFetcher.fetchBindings(
-      "http://localhost:7200/repositories/test2",
-      sparql
-    );
-
-    bindingsStream.on("data", (bindings: any) => console.log(bindings));
-  }
-  function test() {
-    console.log("mytest");
-  }
-
   useEffect(() => {
-    test();
-    getGeometry();
     const viewer = new Viewer({
       canvasId: "myCanvas",
       transparent: true,
@@ -42,7 +15,7 @@ export default function ARViewer(props: { height: string }) {
 
     const loader = new GLTFLoaderPlugin(viewer);
 
-    const model = loader.load({
+    loader.load({
       id: "lol",
       src: "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf",
       edges: true,
@@ -57,13 +30,57 @@ export default function ARViewer(props: { height: string }) {
     const camera = scene.camera;
     camera.projection = "perspective";
 
-    camera.on("viewMatrix", function (matrix: any) {
-      console.log("eye", camera.eye);
-      console.log("look", camera.look);
-      console.log("up", camera.up);
-      console.log("testje", matrix);
-    });
+    // camera.on("viewMatrix", function (matrix: any) {
+    //   console.log("eye", camera.eye);
+    //   console.log("look", camera.look);
+    //   console.log("up", camera.up);
+    //   console.log("testje", matrix);
+    // });
+
+    getGeometry(loader);
   }, []);
+
+  async function getGeometry(loader:any) {
+    const sparql = `
+    PREFIX bot: <https://w3id.org/bot#>
+    PREFIX fog: <https://w3id.org/fog#>
+    PREFIX omg: <https://w3id.org/omg#>
+    PREFIX flupke: <http://flupke.archi#>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    select ?element ?fog_geometry ?geometryData
+    where { 
+      flupke:room1 bot:containsElement ?element .
+        ?element omg:hasGeometry ?geometry .
+        ?geometry ?fog_geometry ?geometryData .
+        FILTER(?fog_geometry IN (fog:asObj, fog:asStl, fog:asGltf)) 
+        FILTER(datatype(?geometryData) = xsd:anyURI)
+    } 
+    #ORDER BY (?element) (?fog_geometry)
+    LIMIT 20
+    `;
+
+    const myFetcher = new SparqlEndpointFetcher();
+
+    const bindingsStream = await myFetcher.fetchBindings(
+      "http://localhost:7200/repositories/test3",
+      sparql
+    );
+
+    bindingsStream.on("data", (bindings: any) => {
+      console.log({
+        element: bindings.element.value,
+        format: bindings.fog_geometry.value,
+        "geometry data": bindings.geometryData.value,
+        source: bindings.geometryData.datatype.value,
+      });
+
+      loader.load({
+        id: bindings.element.value,
+        src: bindings.geometryData.value,
+        edges: true,
+      });
+    });
+  }
 
   return (
     <div
