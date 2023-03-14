@@ -6,43 +6,44 @@
 @prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix flupke:   <http://flupke.archi#> .
 
-<http://flupke.archi/room1> rdf:type bot:Zone ;
-    bot:containsElement <http://flupke.archi/coneOBJ> ;
-    bot:containsElement <http://flupke.archi/coneOBJlit> ;
-    bot:containsElement <http://flupke.archi/cubeGLTF> ;
-    bot:containsElement <http://flupke.archi/cubeGLTF2> ;
-    bot:containsElement <http://flupke.archi/cubeGLTFlit> ;
-    bot:containsElement <http://flupke.archi/IcosphereSTL> ;
-    bot:containsElement <http://flupke.archi/IcosphereSTLlit> .
+flupke:room1 rdf:type bot:Zone ;
+    bot:containsElement flupke:coneOBJ ;
+    bot:containsElement flupke:coneOBJlit ;
+    bot:containsElement flupke:cubeGLTF ;
+    bot:containsElement flupke:cubeGLTF2 ;
+    bot:containsElement flupke:cubeGLTFlit ;
+    bot:containsElement flupke:IcosphereSTL ;
+    bot:containsElement flupke:IcosphereSTLlit .
 
-<http://flupke.archi/coneOBJ> omg:hasGeometry <http://flupke.archi/coneOBJ/geometry1> .
+flupke:coneOBJ omg:hasGeometry flupke:coneOBJ_geometry-1 .
 
-<http://flupke.archi/coneOBJlit> omg:hasGeometry <http://flupke.archi/coneOBJlit/geometry1> .
+flupke:coneOBJlit omg:hasGeometry flupke:coneOBJlit_geometry-1 .
 
-<http://flupke.archi/cubeGLTF> omg:hasGeometry <http://flupke.archi/cubeGLTF/geometry1> .
+flupke:cubeGLTF omg:hasGeometry flupke:cubeGLTF_geometry-1 .
 
-<http://flupke.archi/cubeGLTF2> omg:hasGeometry <http://flupke.archi/cubeGLTF2/geometry1> .
+flupke:cubeGLTF2 omg:hasGeometry flupke:cubeGLTF2_geometry-1 .
 
-<http://flupke.archi/cubeGLTFlit> omg:hasGeometry <http://flupke.archi/cubeGLTFlit/geometry1> .
+flupke:cubeGLTFlit omg:hasGeometry flupke:cubeGLTFlit_geometry-1 .
 
-<http://flupke.archi/IcosphereSTL> omg:hasGeometry <http://flupke.archi/IcosphereSTL/geometry1> .
+flupke:IcosphereSTL omg:hasGeometry flupke:IcosphereSTL_geometry-1 .
 
-<http://flupke.archi/IcosphereSTLlit> omg:hasGeometry <http://flupke.archi/IcosphereSTLlit/geometry1> .
+flupke:IcosphereSTLlit omg:hasGeometry flupke:IcosphereSTLlit_geometry-1 .
 
-<http://flupke.archi/coneOBJ/geometry1> rdf:type bot:Element ;
+flupke:coneOBJ_geometry-1 rdf:type bot:Element ;
     fog:asObj_v3.0-obj "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/coneOBJ.obj"^^xsd:anyURI .
 
-<http://flupke.archi/cubeGLTF/geometry1> rdf:type bot:Element ;
+flupke:cubeGLTF_geometry-1 rdf:type bot:Element ;
     fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf"^^xsd:anyURI .
 
-<http://flupke.archi/cubeGLTF2/geometry1> rdf:type bot:Element ;
+flupke:cubeGLTF2_geometry-1 rdf:type bot:Element ;
     fog:asGltf_v1.0-gltf "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF2.gltf"^^xsd:anyURI .
 
-<http://flupke.archi/IcosphereSTL/geometry1> rdf:type bot:Element ;
+flupke:IcosphereSTL_geometry-1 rdf:type bot:Element ;
     fog:asStl_v1.0-ascii "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/IcosphereSTL.stl"^^xsd:anyURI .
 
-<http://flupke.archi/coneOBJlit/geometry1> rdf:type bot:Element ;
+flupke:coneOBJlit_geometry-1 rdf:type bot:Element ;
     fog:asObj_v3.0-obj """# Blender 3.4.1
 # www.blender.org
 mtllib coneOBJlit.mtl
@@ -215,7 +216,7 @@ f 31/62/32 33/65/32 32/64/32
 f 32/64/33 33/65/33 1/2/33
 """^^xsd:string .
 
-<http://flupke.archi/cubeGLTFlit/geometry1> rdf:type bot:Element ;
+flupke:cubeGLTFlit_geometry-1 rdf:type bot:Element ;
     fog:asGltf_v1.0-gltf '''{
     "asset" : {
         "generator" : "Khronos glTF Blender I/O v3.4.50",
@@ -349,7 +350,7 @@ f 32/64/33 33/65/33 1/2/33
 }
 '''^^xsd:string .
 
-<http://flupke.archi/IcosphereSTLlit/geometry1> rdf:type bot:Element ;
+flupke:IcosphereSTLlit_geometry-1 rdf:type bot:Element ;
     fog:asStl_v1.0-ascii """solid Exported from Blender-3.4.1
 facet normal 0.187597 -0.577354 -0.794651
 outer loop
