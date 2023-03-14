@@ -1,4 +1,10 @@
-import { GLTFLoaderPlugin, NavCubePlugin, Viewer } from "@xeokit/xeokit-sdk";
+import {
+  GLTFLoaderPlugin,
+  NavCubePlugin,
+  OBJLoaderPlugin,
+  STLLoaderPlugin,
+  Viewer,
+} from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
@@ -11,14 +17,6 @@ export default function ARViewer(props: { height: string }) {
     const viewer = new Viewer({
       canvasId: "myCanvas",
       transparent: true,
-    });
-
-    const loader = new GLTFLoaderPlugin(viewer);
-
-    loader.load({
-      id: "lol",
-      src: "https://raw.githubusercontent.com/flol3622/AR-Linked-BIM-viewer/main/public/assets/database_1/cubeGLTF.gltf",
-      edges: true,
     });
 
     new NavCubePlugin(viewer, {
@@ -37,10 +35,10 @@ export default function ARViewer(props: { height: string }) {
     //   console.log("testje", matrix);
     // });
 
-    getGeometry(loader);
+    getGeometry(viewer);
   }, []);
 
-  async function getGeometry(loader:any) {
+  async function getGeometry(viewer: any) {
     const sparql = `
     PREFIX bot: <https://w3id.org/bot#>
     PREFIX fog: <https://w3id.org/fog#>
@@ -53,7 +51,7 @@ export default function ARViewer(props: { height: string }) {
         ?element omg:hasGeometry ?geometry .
         ?geometry ?fog_geometry ?geometryData .
         FILTER(?fog_geometry IN (fog:asObj, fog:asStl, fog:asGltf)) 
-        FILTER(datatype(?geometryData) = xsd:anyURI)
+        #FILTER(datatype(?geometryData) = xsd:anyURI)
     } 
     #ORDER BY (?element) (?fog_geometry)
     LIMIT 20
@@ -67,18 +65,75 @@ export default function ARViewer(props: { height: string }) {
     );
 
     bindingsStream.on("data", (bindings: any) => {
-      console.log({
-        element: bindings.element.value,
-        format: bindings.fog_geometry.value,
-        "geometry data": bindings.geometryData.value,
-        source: bindings.geometryData.datatype.value,
-      });
+      const gltfLoader = new GLTFLoaderPlugin(viewer);
+      const objLoader = new OBJLoaderPlugin(viewer, {});
+      const stlLoader = new STLLoaderPlugin(viewer);
 
-      loader.load({
-        id: bindings.element.value,
-        src: bindings.geometryData.value,
-        edges: true,
-      });
+      if (
+        bindings.geometryData.datatype.value ===
+        "http://www.w3.org/2001/XMLSchema#anyURI"
+      ) {
+        if (bindings.fog_geometry.value === "https://w3id.org/fog#asGltf") {
+          gltfLoader.load({
+            id: bindings.element.value,
+            src: bindings.geometryData.value,
+            edges: true,
+          });
+          console.log("gltf loaded", bindings.element.value);
+        } else if (
+          bindings.fog_geometry.value === "https://w3id.org/fog#asObj"
+        ) {
+          objLoader.load({
+            id: bindings.element.value,
+            src: bindings.geometryData.value,
+          });
+          console.log("obj loaded", bindings.element.value);
+        } else if (
+          bindings.fog_geometry.value === "https://w3id.org/fog#asStl"
+        ) {
+          stlLoader.load({
+            id: bindings.element.value,
+            src: bindings.geometryData.value,
+            edges: true,
+          });
+          console.log("stl loaded", bindings.element.value);
+        } else {
+          console.log(
+            "no geometry format found | geometry format not yet implemented"
+          );
+        }
+      } else if (
+        bindings.geometryData.datatype.value ===
+        "http://www.w3.org/2001/XMLSchema#string"
+      ) {
+        console.log({"format": bindings.fog_geometry.value});
+        if (bindings.fog_geometry.value === "https://w3id.org/fog#asGltf") {
+          gltfLoader.load({
+            id: bindings.element.value,
+            gltf: bindings.geometryData.value,
+            edges: true,
+          });
+          console.log("gltf literal loaded", bindings.element.value);
+        } else if (
+          bindings.fog_geometry.value === "https://w3id.org/fog#asObj"
+        ) {console.log("obj literal not supported by Xeokit", bindings.element.value);
+        } else if (
+          bindings.fog_geometry.value === "https://w3id.org/fog#asStl"
+        ) {
+          stlLoader.load({
+            id: bindings.element.value,
+            stl: bindings.geometryData.value,
+            edges: true,
+          });
+          console.log("stl literal loaded", bindings.element.value);
+        } else {
+          console.log(
+            "no geometry format found | geometry format not yet implemented"
+          );
+        }
+      } else {
+        console.log("wrong or undefined data source");
+      }
     });
   }
 
