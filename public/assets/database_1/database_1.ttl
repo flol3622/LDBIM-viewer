@@ -16,12 +16,12 @@
     bot:containsElement <http://flupke.archi/IcosphereSTL> ;
     bot:containsElement <http://flupke.archi/IcosphereSTLlit> .
 
-<http://flupke.archi/coneOBJ> omg:hasGeometry <http://flupke.archi/coneOBJ/geometry1> ;
-<http://flupke.archi/coneOBJlit> omg:hasGeometry <http://flupke.archi/coneOBJlit/geometry1> ;
-<http://flupke.archi/cubeGLTF> omg:hasGeometry <http://flupke.archi/cubeGLTF/geometry1> ;
-<http://flupke.archi/cubeGLTF2> omg:hasGeometry <http://flupke.archi/cubeGLTF2/geometry1> ;
-<http://flupke.archi/cubeGLTFlit> omg:hasGeometry <http://flupke.archi/cubeGLTFlit/geometry1> ;
-<http://flupke.archi/IcosphereSTL> omg:hasGeometry <http://flupke.archi/IcosphereSTL/geometry1> ;
+<http://flupke.archi/coneOBJ> omg:hasGeometry <http://flupke.archi/coneOBJ/geometry1> .
+<http://flupke.archi/coneOBJlit> omg:hasGeometry <http://flupke.archi/coneOBJlit/geometry1> .
+<http://flupke.archi/cubeGLTF> omg:hasGeometry <http://flupke.archi/cubeGLTF/geometry1> .
+<http://flupke.archi/cubeGLTF2> omg:hasGeometry <http://flupke.archi/cubeGLTF2/geometry1> .
+<http://flupke.archi/cubeGLTFlit> omg:hasGeometry <http://flupke.archi/cubeGLTFlit/geometry1> .
+<http://flupke.archi/IcosphereSTL> omg:hasGeometry <http://flupke.archi/IcosphereSTL/geometry1> .
 <http://flupke.archi/IcosphereSTLlit> omg:hasGeometry <http://flupke.archi/IcosphereSTLlit/geometry1> .
 
 <http://flupke.archi/coneOBJ/geometry1> rdf:type bot:Element ;
