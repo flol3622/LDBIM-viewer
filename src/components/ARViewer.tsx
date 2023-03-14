@@ -39,6 +39,8 @@ export default function ARViewer(props: { height: string }) {
   }, []);
 
   async function getGeometry(viewer: any) {
+
+    // sparql query to get all compatible geometry data from a room
     const sparql = `
     PREFIX bot: <https://w3id.org/bot#>
     PREFIX fog: <https://w3id.org/fog#>
@@ -57,22 +59,28 @@ export default function ARViewer(props: { height: string }) {
     LIMIT 20
     `;
 
+    // fetch the data from the sparql endpoint
     const myFetcher = new SparqlEndpointFetcher();
-
     const bindingsStream = await myFetcher.fetchBindings(
       "http://localhost:7200/repositories/test3",
       sparql
     );
-
+    
+    // loop through the incoming stream and load the geometry
     bindingsStream.on("data", (bindings: any) => {
+
+      // define loaders for the different geometry formats
       const gltfLoader = new GLTFLoaderPlugin(viewer);
       const objLoader = new OBJLoaderPlugin(viewer, {});
       const stlLoader = new STLLoaderPlugin(viewer);
 
+      // if defined as url
       if (
         bindings.geometryData.datatype.value ===
         "http://www.w3.org/2001/XMLSchema#anyURI"
       ) {
+
+        // if the geometry is in gltf format
         if (bindings.fog_geometry.value === "https://w3id.org/fog#asGltf") {
           gltfLoader.load({
             id: bindings.element.value,
@@ -80,7 +88,10 @@ export default function ARViewer(props: { height: string }) {
             edges: true,
           });
           console.log("gltf loaded", bindings.element.value);
-        } else if (
+        } 
+
+        // if the geometry is in obj format
+        else if (
           bindings.fog_geometry.value === "https://w3id.org/fog#asObj"
         ) {
           objLoader.load({
@@ -88,7 +99,10 @@ export default function ARViewer(props: { height: string }) {
             src: bindings.geometryData.value,
           });
           console.log("obj loaded", bindings.element.value);
-        } else if (
+        } 
+
+        // if the geometry is in stl format
+        else if (
           bindings.fog_geometry.value === "https://w3id.org/fog#asStl"
         ) {
           stlLoader.load({
@@ -97,16 +111,24 @@ export default function ARViewer(props: { height: string }) {
             edges: true,
           });
           console.log("stl loaded", bindings.element.value);
-        } else {
+        } 
+        
+        // if the geometry format is not yet implemented
+        else {
           console.log(
-            "no geometry format found | geometry format not yet implemented"
+            "this geometry format, incoming from an url, is not yet implemented"
           );
         }
-      } else if (
+      } 
+      
+      // if defined as literal
+      else if (
         bindings.geometryData.datatype.value ===
         "http://www.w3.org/2001/XMLSchema#string"
       ) {
-        console.log({"format": bindings.fog_geometry.value});
+        console.log({ format: bindings.fog_geometry.value });
+
+        // if the geometry is in gltf format
         if (bindings.fog_geometry.value === "https://w3id.org/fog#asGltf") {
           gltfLoader.load({
             id: bindings.element.value,
@@ -114,10 +136,10 @@ export default function ARViewer(props: { height: string }) {
             edges: true,
           });
           console.log("gltf literal loaded", bindings.element.value);
-        } else if (
-          bindings.fog_geometry.value === "https://w3id.org/fog#asObj"
-        ) {console.log("obj literal not supported by Xeokit", bindings.element.value);
-        } else if (
+        } 
+        
+        // if the geometry is in stl format
+        else if (
           bindings.fog_geometry.value === "https://w3id.org/fog#asStl"
         ) {
           stlLoader.load({
@@ -126,12 +148,18 @@ export default function ARViewer(props: { height: string }) {
             edges: true,
           });
           console.log("stl literal loaded", bindings.element.value);
-        } else {
+        } 
+        
+        // if the geometry format is not yet implemented
+        else {
           console.log(
-            "no geometry format found | geometry format not yet implemented"
+            "this geometry format, incoming from a literal, is not yet implemented"
           );
         }
-      } else {
+      } 
+      
+      // if the geometry source is undefined | wrong
+      else {
         console.log("wrong or undefined data source");
       }
     });
