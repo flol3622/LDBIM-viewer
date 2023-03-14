@@ -1,12 +1,40 @@
 import { GLTFLoaderPlugin, NavCubePlugin, Viewer } from "@xeokit/xeokit-sdk";
-import { useSetRecoilState } from "recoil";
+import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 import { location } from "~/atoms";
 
 export default function ARViewer(props: { height: string }) {
   const setCameraPosition = useSetRecoilState(location);
 
+  async function getGeometry() {
+    const sparql = `
+    PREFIX bot: <https://w3id.org/bot#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX fog: <https://w3id.org/fog#>
+    PREFIX omg: <https://w3id.org/omg#>
+    PREFIX flupke: <http://flupke.archi/>
+    select * where { 
+      flupke:cubeGLTF ?p ?o.
+    } limit 10 
+    `;
+
+    const myFetcher = new SparqlEndpointFetcher();
+
+    const bindingsStream = await myFetcher.fetchBindings(
+      "http://localhost:7200/repositories/test2",
+      sparql
+    );
+
+    bindingsStream.on("data", (bindings: any) => console.log(bindings));
+  }
+  function test() {
+    console.log("mytest");
+  }
+
   useEffect(() => {
+    test();
+    getGeometry();
     const viewer = new Viewer({
       canvasId: "myCanvas",
       transparent: true,
@@ -35,7 +63,6 @@ export default function ARViewer(props: { height: string }) {
       console.log("up", camera.up);
       console.log("testje", matrix);
     });
-
   }, []);
 
   return (
@@ -59,6 +86,7 @@ export default function ARViewer(props: { height: string }) {
         className="navCube"
         id="myNavCubeCanvas"
       ></canvas>
+      <button>test sparql fetch</button>
     </div>
   );
 }
