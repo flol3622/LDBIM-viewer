@@ -39,7 +39,6 @@ export default function ARViewer(props: { height: string }) {
   }, []);
 
   async function getGeometry(viewer: any) {
-
     // sparql query to get all compatible geometry data from a room
     const sparql = `
     PREFIX bot: <https://w3id.org/bot#>
@@ -65,103 +64,77 @@ export default function ARViewer(props: { height: string }) {
       "http://localhost:7200/repositories/test3",
       sparql
     );
+
+    // initialize the loaders
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const objLoader = new OBJLoaderPlugin(viewer, {});
+    const stlLoader = new STLLoaderPlugin(viewer);
     
-    // loop through the incoming stream and load the geometry
+    // Define loaders for each format
+    type LoaderType = {
+      [key: string]: {
+        loader: any;
+        params: any;
+        litParam?: string;
+      };
+    };
+
+    const loaderTypes: LoaderType = {
+      "https://w3id.org/fog#asGltf": {
+        loader: gltfLoader,
+        params: { edges: true },
+        litParam: "gltf",
+      },
+      "https://w3id.org/fog#asStl": {
+        loader: stlLoader,
+        params: { edges: true },
+        litParam: "stl",
+      },
+      "https://w3id.org/fog#asObj": {
+        loader: objLoader,
+        params: {},
+      },
+    };
+    
+    // for every incoming result, load the geometry
     bindingsStream.on("data", (bindings: any) => {
+      const format = bindings.fog_geometry.value;
+      const data = bindings.geometryData.value;
+      const dataType = bindings.geometryData.datatype.value;
+      const element = bindings.element.value;
 
-      // define loaders for the different geometry formats
-      const gltfLoader = new GLTFLoaderPlugin(viewer);
-      const objLoader = new OBJLoaderPlugin(viewer, {});
-      const stlLoader = new STLLoaderPlugin(viewer);
+      const loaderType = loaderTypes[format];
 
-      // if defined as url
-      if (
-        bindings.geometryData.datatype.value ===
-        "http://www.w3.org/2001/XMLSchema#anyURI"
-      ) {
+      // check if the format is supported
+      if (loaderType) {
 
-        // if the geometry is in gltf format
-        if (bindings.fog_geometry.value === "https://w3id.org/fog#asGltf") {
-          gltfLoader.load({
-            id: bindings.element.value,
-            src: bindings.geometryData.value,
-            edges: true,
-          });
-          console.log("gltf loaded", bindings.element.value);
-        } 
-
-        // if the geometry is in obj format
-        else if (
-          bindings.fog_geometry.value === "https://w3id.org/fog#asObj"
+        // if the data is a literal, and is supported
+        if (
+          dataType === "http://www.w3.org/2001/XMLSchema#string" &&
+          loaderType.litParam
         ) {
-          objLoader.load({
-            id: bindings.element.value,
-            src: bindings.geometryData.value,
+          loaderType.loader.load({
+            ...loaderType.params,
+            id: element,
+            [loaderType.litParam]: data,
           });
-          console.log("obj loaded", bindings.element.value);
-        } 
-
-        // if the geometry is in stl format
-        else if (
-          bindings.fog_geometry.value === "https://w3id.org/fog#asStl"
-        ) {
-          stlLoader.load({
-            id: bindings.element.value,
-            src: bindings.geometryData.value,
-            edges: true,
-          });
-          console.log("stl loaded", bindings.element.value);
         } 
         
-        // if the geometry format is not yet implemented
-        else {
-          console.log(
-            "this geometry format, incoming from an url, is not yet implemented"
-          );
-        }
+        // if the data is a uri
+        else if (dataType === "http://www.w3.org/2001/XMLSchema#anyURI") {
+          loaderType.loader.load({
+            ...loaderType.params,
+            id: element,
+            src: data,
+          });
+        } 
+        
+        // if the data source is not supported
+        else console.log("unsupported / undefined data source", element);
       } 
       
-      // if defined as literal
-      else if (
-        bindings.geometryData.datatype.value ===
-        "http://www.w3.org/2001/XMLSchema#string"
-      ) {
-        console.log({ format: bindings.fog_geometry.value });
-
-        // if the geometry is in gltf format
-        if (bindings.fog_geometry.value === "https://w3id.org/fog#asGltf") {
-          gltfLoader.load({
-            id: bindings.element.value,
-            gltf: bindings.geometryData.value,
-            edges: true,
-          });
-          console.log("gltf literal loaded", bindings.element.value);
-        } 
-        
-        // if the geometry is in stl format
-        else if (
-          bindings.fog_geometry.value === "https://w3id.org/fog#asStl"
-        ) {
-          stlLoader.load({
-            id: bindings.element.value,
-            stl: bindings.geometryData.value,
-            edges: true,
-          });
-          console.log("stl literal loaded", bindings.element.value);
-        } 
-        
-        // if the geometry format is not yet implemented
-        else {
-          console.log(
-            "this geometry format, incoming from a literal, is not yet implemented"
-          );
-        }
-      } 
-      
-      // if the geometry source is undefined | wrong
-      else {
-        console.log("wrong or undefined data source");
-      }
+      // if the format is not supported
+      else console.log("unsupported / undefined geometry format", element);
     });
   }
 
