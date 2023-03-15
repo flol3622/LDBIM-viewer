@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { location } from "~/atoms";
 
-export default function ARViewer(props: { height: string }) {
+export default function ARViewer() {
   const setCameraPosition = useSetRecoilState(location);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function ARViewer(props: { height: string }) {
     const gltfLoader = new GLTFLoaderPlugin(viewer);
     const objLoader = new OBJLoaderPlugin(viewer, {});
     const stlLoader = new STLLoaderPlugin(viewer);
-    
+
     // Define loaders for each format
     type LoaderType = {
       [key: string]: {
@@ -95,7 +95,7 @@ export default function ARViewer(props: { height: string }) {
         params: {},
       },
     };
-    
+
     // for every incoming result, load the geometry
     bindingsStream.on("data", (bindings: any) => {
       const format = bindings.fog_geometry.value;
@@ -107,7 +107,6 @@ export default function ARViewer(props: { height: string }) {
 
       // check if the format is supported
       if (loaderType) {
-
         // if the data is a literal, and is supported
         if (
           dataType === "http://www.w3.org/2001/XMLSchema#string" &&
@@ -118,8 +117,8 @@ export default function ARViewer(props: { height: string }) {
             id: element,
             [loaderType.litParam]: data,
           });
-        } 
-        
+        }
+
         // if the data is a uri
         else if (dataType === "http://www.w3.org/2001/XMLSchema#anyURI") {
           loaderType.loader.load({
@@ -127,39 +126,27 @@ export default function ARViewer(props: { height: string }) {
             id: element,
             src: data,
           });
-        } 
-        
+        }
+
         // if the data source is not supported
         else console.log("unsupported / undefined data source", element);
-      } 
-      
+      }
+
       // if the format is not supported
       else console.log("unsupported / undefined geometry format", element);
     });
   }
 
   return (
-    <div
-      className="modelContainer"
-      style={{ width: "100%", height: props.height }}
-    >
+    <>
       <canvas
         id="myCanvas"
-        style={{ width: "100%", height: props.height }}
-        className="border-2 border-red-500"
+        className="h-full w-full"
       ></canvas>
       <canvas
-        style={{
-          height: "200px",
-          width: "200px",
-          position: "fixed",
-          right: 0,
-          bottom: 0,
-        }}
-        className="navCube"
+        className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
       ></canvas>
-      <button>test sparql fetch</button>
-    </div>
+    </>
   );
 }

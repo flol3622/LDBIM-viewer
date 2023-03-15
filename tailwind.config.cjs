@@ -1,10 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-const config = {
+module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    colors: {
+      ugent: "#1E64C8",
+    },
     extend: {},
+    plugins: [],
   },
-  plugins: [],
 };
-
-module.exports = config;

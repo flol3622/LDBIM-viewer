@@ -9,6 +9,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.13",
     "@xeokit/xeokit-sdk": "^2.3.9",
     "fetch-sparql-endpoint": "^3.2.1",
     "next": "^13.2.1",
