@@ -28,17 +28,18 @@ export default function ARViewer() {
     const camera = scene.camera;
     camera.projection = "perspective";
 
-    // camera.on("viewMatrix", function (matrix: any) {
-    //   console.log("eye", camera.eye);
-    //   console.log("look", camera.look);
-    //   console.log("up", camera.up);
-    //   console.log("testje", matrix);
-    // });
+    camera.on("viewMatrix", function (matrix: any) {
+      console.log("eye", camera.eye);
+      console.log("look", camera.look);
+      console.log("up", camera.up);
+      console.log("testje", matrix);
+    });
 
     getGeometry(viewer);
   }, []);
 
   async function getGeometry(viewer: any) {
+    console.log("getGeometry");
     // sparql query to get all compatible geometry data from a room
     const sparql = `
     PREFIX bot: <https://w3id.org/bot#>
@@ -139,10 +140,7 @@ export default function ARViewer() {
 
   return (
     <>
-      <canvas
-        id="myCanvas"
-        className="h-full w-full"
-      ></canvas>
+      <canvas id="myCanvas" className="h-full w-full"></canvas>
       <canvas
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
