@@ -7,10 +7,13 @@ import {
 } from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 import { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { location, uiQuery } from "~/atoms";
+import { useRecoilValue } from "recoil";
+import { endpoint, uiQuery } from "~/atoms";
 
 export default function ARViewer() {
+  const uiQueryValue = useRecoilValue(uiQuery);
+  const endpointValue = useRecoilValue(endpoint);
+
   // create the viewer
   useEffect(() => {
     // initialize the viewer
@@ -49,8 +52,8 @@ export default function ARViewer() {
     // fetch the data from the sparql endpoint, using the uiQuery
     const myFetcher = new SparqlEndpointFetcher();
     const bindingsStream = await myFetcher.fetchBindings(
-      "http://localhost:7200/repositories/test3",
-      useRecoilValue(uiQuery)
+      endpointValue,
+      uiQueryValue
     );
 
     // initialize the loaders
@@ -149,7 +152,7 @@ export default function ARViewer() {
 
   return (
     <>
-      <canvas id="myCanvas" className="h-full w-full"></canvas>
+      <canvas id="myCanvas" className=""></canvas>
       <canvas
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
