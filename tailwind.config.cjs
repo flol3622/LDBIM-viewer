@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     colors: {
       ugent: "#1E64C8",
+      "white": "#FFFFFF",
     },
     extend: {},
     plugins: [],

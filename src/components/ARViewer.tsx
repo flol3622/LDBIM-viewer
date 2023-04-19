@@ -14,7 +14,9 @@ export default function ARViewer() {
   const uiQueryValue = useRecoilValue(uiQuery);
   const endpointValue = useRecoilValue(endpoint);
 
-  // create the viewer
+  // --------------------------------
+  // initialize the setup
+  // --------------------------------
   useEffect(() => {
     // initialize the viewer
     const viewer = new Viewer({
@@ -40,21 +42,6 @@ export default function ARViewer() {
       console.log("up", camera.up);
       console.log("testje", matrix);
     });
-
-    // fetch the geometry to the viewer
-    getGeometry(viewer);
-  }, []);
-
-  // fetching function
-  async function getGeometry(viewer: any) {
-    console.log("getGeometry");
-
-    // fetch the data from the sparql endpoint, using the uiQuery
-    const myFetcher = new SparqlEndpointFetcher();
-    const bindingsStream = await myFetcher.fetchBindings(
-      endpointValue,
-      uiQueryValue
-    );
 
     // initialize the loaders
     const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -87,15 +74,32 @@ export default function ARViewer() {
         litParam: "src", // will be converted to a blob
       },
     };
+    // fetch the geometry to the viewer
+    getGeometry(loaderTypes);
+  }, [endpointValue]);
 
-    // temporary blob for viewers that need a file
+  // --------------------------------
+  // fetching function
+  // --------------------------------
+  async function getGeometry(loaderTypes: any) {
     function blobToUrl(blob: string) {
       const url = URL.createObjectURL(new Blob([blob]));
+      console.log("blobToUrl", url);
+      console.log("theblob", blob);
       return url;
     }
     function revokeBlobUrl(url: string) {
       URL.revokeObjectURL(url);
     }
+
+    console.log("getGeometry");
+
+    // fetch the data from the sparql endpoint, using the uiQuery
+    const myFetcher = new SparqlEndpointFetcher();
+    const bindingsStream = await myFetcher.fetchBindings(
+      endpointValue,
+      uiQueryValue
+    );
 
     // for every incoming result, load the geometry
     bindingsStream.on("data", (bindings: any) => {
@@ -122,7 +126,6 @@ export default function ARViewer() {
               id: element,
               src: blobUrl,
             });
-            revokeBlobUrl(blobUrl);
           } else {
             loaderType.loader.load({
               ...loaderType.params,
@@ -152,7 +155,7 @@ export default function ARViewer() {
 
   return (
     <>
-      <canvas id="myCanvas" className=""></canvas>
+      <canvas id="myCanvas" className="h-full w-full"></canvas>
       <canvas
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
