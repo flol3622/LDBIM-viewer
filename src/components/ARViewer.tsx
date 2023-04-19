@@ -7,27 +7,30 @@ import {
 } from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { location } from "~/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { location, uiQuery } from "~/atoms";
 
 export default function ARViewer() {
-  const setCameraPosition = useSetRecoilState(location);
-
+  // create the viewer
   useEffect(() => {
+    // initialize the viewer
     const viewer = new Viewer({
       canvasId: "myCanvas",
       transparent: true,
     });
 
+    // initialize the navcube
     new NavCubePlugin(viewer, {
       canvasId: "myNavCubeCanvas",
       visible: true,
     });
 
+    // identify the scene and camera
     const scene = viewer.scene;
     const camera = scene.camera;
     camera.projection = "perspective";
 
+    // log the camera position
     camera.on("viewMatrix", function (matrix: any) {
       console.log("eye", camera.eye);
       console.log("look", camera.look);
@@ -35,35 +38,19 @@ export default function ARViewer() {
       console.log("testje", matrix);
     });
 
+    // fetch the geometry to the viewer
     getGeometry(viewer);
   }, []);
 
+  // fetching function
   async function getGeometry(viewer: any) {
     console.log("getGeometry");
-    // sparql query to get all compatible geometry data from a room
-    const sparql = `
-    PREFIX bot: <https://w3id.org/bot#>
-    PREFIX fog: <https://w3id.org/fog#>
-    PREFIX omg: <https://w3id.org/omg#>
-    PREFIX flupke: <http://flupke.archi#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    select ?element ?fog_geometry ?geometryData
-    where { 
-      flupke:room1 bot:containsElement ?element .
-        ?element omg:hasGeometry ?geometry .
-        ?geometry ?fog_geometry ?geometryData .
-        FILTER(?fog_geometry IN (fog:asObj, fog:asStl, fog:asGltf)) 
-        #FILTER(datatype(?geometryData) = xsd:anyURI)
-    } 
-    #ORDER BY (?element) (?fog_geometry)
-    LIMIT 20
-    `;
 
-    // fetch the data from the sparql endpoint
+    // fetch the data from the sparql endpoint, using the uiQuery
     const myFetcher = new SparqlEndpointFetcher();
     const bindingsStream = await myFetcher.fetchBindings(
       "http://localhost:7200/repositories/test3",
-      sparql
+      useRecoilValue(uiQuery)
     );
 
     // initialize the loaders
@@ -94,8 +81,18 @@ export default function ARViewer() {
       "https://w3id.org/fog#asObj": {
         loader: objLoader,
         params: {},
+        litParam: "src", // will be converted to a blob
       },
     };
+
+    // temporary blob for viewers that need a file
+    function blobToUrl(blob: string) {
+      const url = URL.createObjectURL(new Blob([blob]));
+      return url;
+    }
+    function revokeBlobUrl(url: string) {
+      URL.revokeObjectURL(url);
+    }
 
     // for every incoming result, load the geometry
     bindingsStream.on("data", (bindings: any) => {
@@ -104,23 +101,35 @@ export default function ARViewer() {
       const dataType = bindings.geometryData.datatype.value;
       const element = bindings.element.value;
 
+      // select the right loader
       const loaderType = loaderTypes[format];
 
       // check if the format is supported
       if (loaderType) {
-        // if the data is a literal, and is supported
+        // if the data is a literal, or can be converted to a blob
         if (
           dataType === "http://www.w3.org/2001/XMLSchema#string" &&
           loaderType.litParam
         ) {
-          loaderType.loader.load({
-            ...loaderType.params,
-            id: element,
-            [loaderType.litParam]: data,
-          });
+          // if data needs to be converted to a blob
+          if (loaderType.litParam === "src") {
+            const blobUrl = blobToUrl(data);
+            loaderType.loader.load({
+              ...loaderType.params,
+              id: element,
+              src: blobUrl,
+            });
+            revokeBlobUrl(blobUrl);
+          } else {
+            loaderType.loader.load({
+              ...loaderType.params,
+              id: element,
+              [loaderType.litParam]: data,
+            });
+          }
         }
 
-        // if the data is a uri
+        // if the data is an uri
         else if (dataType === "http://www.w3.org/2001/XMLSchema#anyURI") {
           loaderType.loader.load({
             ...loaderType.params,
