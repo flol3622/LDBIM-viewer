@@ -71,7 +71,6 @@ export default function ARViewer() {
       "https://w3id.org/fog#asObj": {
         loader: objLoader,
         params: {},
-        litParam: "src", // will be converted to a blob
       },
     };
     // fetch the geometry to the viewer
@@ -82,16 +81,6 @@ export default function ARViewer() {
   // fetching function
   // --------------------------------
   async function getGeometry(loaderTypes: any) {
-    function blobToUrl(blob: string) {
-      const url = URL.createObjectURL(new Blob([blob]));
-      console.log("blobToUrl", url);
-      console.log("theblob", blob);
-      return url;
-    }
-    function revokeBlobUrl(url: string) {
-      URL.revokeObjectURL(url);
-    }
-
     console.log("getGeometry");
 
     // fetch the data from the sparql endpoint, using the uiQuery
@@ -118,21 +107,11 @@ export default function ARViewer() {
           dataType === "http://www.w3.org/2001/XMLSchema#string" &&
           loaderType.litParam
         ) {
-          // if data needs to be converted to a blob
-          if (loaderType.litParam === "src") {
-            const blobUrl = blobToUrl(data);
-            loaderType.loader.load({
-              ...loaderType.params,
-              id: element,
-              src: blobUrl,
-            });
-          } else {
-            loaderType.loader.load({
-              ...loaderType.params,
-              id: element,
-              [loaderType.litParam]: data,
-            });
-          }
+          loaderType.loader.load({
+            ...loaderType.params,
+            id: element,
+            [loaderType.litParam]: data,
+          });
         }
 
         // if the data is an uri
