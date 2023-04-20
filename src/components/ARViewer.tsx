@@ -3,7 +3,7 @@ import {
   NavCubePlugin,
   OBJLoaderPlugin,
   STLLoaderPlugin,
-  Viewer,
+  Viewer
 } from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 import { useEffect, useRef } from "react";
@@ -13,7 +13,18 @@ import { endpoint, uiQuery } from "~/atoms";
 export default function ARViewer() {
   const uiQueryValue = useRecoilValue(uiQuery);
   const endpointValue = useRecoilValue(endpoint);
+
+  // Refs to store viewer and loaderTypes
   const viewerRef = useRef<Viewer | null>(null);
+  // Define loaders for each format
+  type LoaderType = {
+    [key: string]: {
+      loader: any;
+      params: any;
+      litParam?: string;
+    };
+  };
+  const loaderTypesRef = useRef<LoaderType | null>(null);
 
   // --------------------------------
   // initialize the setup
@@ -49,39 +60,47 @@ export default function ARViewer() {
     const objLoader = new OBJLoaderPlugin(viewerRef.current, {});
     const stlLoader = new STLLoaderPlugin(viewerRef.current);
 
-    // Define loaders for each format
-    type LoaderType = {
-      [key: string]: {
-        loader: any;
-        params: any;
-        litParam?: string;
-      };
-    };
-
-    const loaderTypes: LoaderType = {
+    // store the loaders in a ref
+    loaderTypesRef.current = {
       "https://w3id.org/fog#asGltf": {
         loader: gltfLoader,
-        params: { edges: true , matrix: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]},
+        params: { edges: true },
         litParam: "gltf",
       },
       "https://w3id.org/fog#asStl": {
         loader: stlLoader,
-        params: { edges: true, matrix: [0.001,0,0,0,0,0.001,0,0,0,0,0.001,0,0,0,0,1] },
+        params: { edges: true, rotation:[180,0,0] },
         litParam: "stl",
       },
       "https://w3id.org/fog#asObj": {
         loader: objLoader,
-        params: { matrix: [0.001,0,0,0,0.001,0,0,0,0,0.001,0,0,0,0,1] },
+        params: {},
       },
     };
-    // fetch the geometry to the viewer
-    getGeometry(loaderTypes);
-  }, [endpointValue]);
+  });
+
+  // --------------------------------
+  // Fetch geometry when uiQueryValue changes
+  // --------------------------------
+  useEffect(() => {
+    // if both are initialized
+    if (viewerRef.current && loaderTypesRef.current) {
+      const viewer = viewerRef.current;
+      const loaderTypes = loaderTypesRef.current;
+
+      // Clear the scene
+      const scene = viewer.scene;
+      scene.clear();
+
+      // fetch the geometry to the viewer
+      getGeometry();
+    }
+  }, [uiQueryValue]);
 
   // --------------------------------
   // fetching function
   // --------------------------------
-  async function getGeometry(loaderTypes: any) {
+  async function getGeometry() {
     console.log("getGeometry");
 
     // fetch the data from the sparql endpoint, using the uiQuery
@@ -99,7 +118,7 @@ export default function ARViewer() {
       const element = bindings.element.value;
 
       // select the right loader
-      const loaderType = loaderTypes[format];
+      const loaderType = loaderTypesRef.current?.[format]
 
       // check if the format is supported
       if (loaderType) {
@@ -114,8 +133,7 @@ export default function ARViewer() {
             [loaderType.litParam]: data,
           });
           sceneModel.on("loaded", () => {
-            console.log("loaded uri of format:", format);
-            viewerRef.current?.cameraFlight.flyTo(sceneModel);
+            console.log("loaded literal of format:", format);
           });
         }
 
@@ -128,7 +146,6 @@ export default function ARViewer() {
           });
           sceneModel.on("loaded", () => {
             console.log("loaded uri of format:", format);
-            viewerRef.current?.cameraFlight.flyTo(sceneModel);
           });
         }
 
