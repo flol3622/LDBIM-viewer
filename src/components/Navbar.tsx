@@ -1,15 +1,16 @@
-import ShareIcon from "@mui/icons-material/Share";
-import { IconButton, InputBase, TextField, Tooltip } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import InfoIcon from "@mui/icons-material/Info";
+import { IconButton, TextField, Tooltip } from "@mui/material";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { endpoint } from "~/atoms";
-import { useState, useEffect, useRef } from "react";
 
 export default function Navbar() {
-  const [tempEndpoint, setTempEndpoint] = useState("");
   const [endpointValue, setEndpoint] = useRecoilState(endpoint);
-  
+  const [tempEndpoint, setTempEndpoint] = useState(
+    "http://localhost:7200/repositories/duplex-v1"
+  );
+
   const handleEnpointChange = (event: any) => {
     setTempEndpoint(event.target.value);
   };
@@ -30,7 +31,7 @@ export default function Navbar() {
         label="Endpoint"
         variant="filled"
         sx={{ flexGrow: 1 }}
-        defaultValue={endpointValue}
+        defaultValue={tempEndpoint}
         onChange={handleEnpointChange}
       />
       <h1>
@@ -40,7 +41,7 @@ export default function Navbar() {
       </h1>
 
       <Tooltip title="info">
-        <IconButton onClick={updateEndpoint}>
+        <IconButton>
           <InfoIcon sx={{ color: "#1E64C8" }} />
         </IconButton>
       </Tooltip>

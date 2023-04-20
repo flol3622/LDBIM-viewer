@@ -2,15 +2,18 @@ import {
   GLTFLoaderPlugin,
   NavCubePlugin,
   OBJLoaderPlugin,
+  Plugin,
   STLLoaderPlugin,
-  Viewer
+  Viewer,
 } from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { TypeOf } from "zod";
 import { endpoint, uiQuery } from "~/atoms";
 
 export default function ARViewer() {
+  const [clean, setClean] = useState<boolean>(false);
   const uiQueryValue = useRecoilValue(uiQuery);
   const endpointValue = useRecoilValue(endpoint);
 
@@ -30,6 +33,13 @@ export default function ARViewer() {
   // initialize the setup
   // --------------------------------
   useEffect(() => {
+    viewerRef.current?.scene.clear();
+    // destroy every loader in the loaderTypesRef
+    if (loaderTypesRef.current) {
+      for (const key in loaderTypesRef.current) {
+        loaderTypesRef.current[key]?.loader.destroy();
+      }
+    }
     // initialize the viewer
     viewerRef.current = new Viewer({
       canvasId: "myCanvas",
@@ -43,17 +53,9 @@ export default function ARViewer() {
     });
 
     // identify the scene and camera
-    const scene = viewerRef.current;
+    const scene = viewerRef.current.scene;
     const camera = scene.camera;
     camera.projection = "perspective";
-
-    // log the camera position
-    // camera.on("viewMatrix", function (matrix: any) {
-    //   console.log("eye", camera.eye);
-    //   console.log("look", camera.look);
-    //   console.log("up", camera.up);
-    //   console.log("testje", matrix);
-    // });
 
     // initialize the loaders
     const gltfLoader = new GLTFLoaderPlugin(viewerRef.current);
@@ -69,7 +71,7 @@ export default function ARViewer() {
       },
       "https://w3id.org/fog#asStl": {
         loader: stlLoader,
-        params: { edges: true, rotation:[180,0,0] },
+        params: { edges: true, rotation: [180, 0, 0] },
         litParam: "stl",
       },
       "https://w3id.org/fog#asObj": {
@@ -77,31 +79,25 @@ export default function ARViewer() {
         params: {},
       },
     };
-  });
+    console.log("initialized");
+  }, [clean]);
 
   // --------------------------------
-  // Fetch geometry when uiQueryValue changes
+  // Fetch geometry when uiQueryValue or endpointValue changes
   // --------------------------------
   useEffect(() => {
-    // if both are initialized
     if (viewerRef.current && loaderTypesRef.current) {
-      const viewer = viewerRef.current;
-      const loaderTypes = loaderTypesRef.current;
-
-      // Clear the scene
-      const scene = viewer.scene;
-      scene.clear();
-
       // fetch the geometry to the viewer
       getGeometry();
     }
-  }, [uiQueryValue]);
+  }, [uiQueryValue, endpointValue, viewerRef, loaderTypesRef]);
+
 
   // --------------------------------
   // fetching function
   // --------------------------------
   async function getGeometry() {
-    console.log("getGeometry");
+    console.log("getting geometry");
 
     // fetch the data from the sparql endpoint, using the uiQuery
     const myFetcher = new SparqlEndpointFetcher();
@@ -118,7 +114,7 @@ export default function ARViewer() {
       const element = bindings.element.value;
 
       // select the right loader
-      const loaderType = loaderTypesRef.current?.[format]
+      const loaderType = loaderTypesRef.current?.[format];
 
       // check if the format is supported
       if (loaderType) {
@@ -133,7 +129,7 @@ export default function ARViewer() {
             [loaderType.litParam]: data,
           });
           sceneModel.on("loaded", () => {
-            console.log("loaded literal of format:", format);
+            // console.log("loaded literal of format:", format);
           });
         }
 
@@ -145,7 +141,8 @@ export default function ARViewer() {
             src: data,
           });
           sceneModel.on("loaded", () => {
-            console.log("loaded uri of format:", format);
+            // console.log("loaded uri of format:", format);
+            // console.log(sceneModel.id);
           });
         }
 
@@ -158,6 +155,23 @@ export default function ARViewer() {
     });
   }
 
+  function select() {
+    viewerRef.current?.scene.setObjectsSelected(
+      ["https://172.16.10.122:8080/projects/1001/floor_1xS3BCk291UvhgP2dvNYcU"],
+      true
+    );
+    console.log("testje");
+  }
+
+  const viewer = viewerRef.current;
+  viewer?.scene.input.on("mouseclicked", function (coords) {
+    var hit = viewer.scene.pick({
+      canvasPos: coords,
+    });
+
+    console.log(hit);
+  });
+
   return (
     <>
       <canvas id="myCanvas" className="h-full w-full"></canvas>
@@ -165,6 +179,12 @@ export default function ARViewer() {
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
       ></canvas>
+      <button className="fixed top-20" onClick={() => select()}>
+        test
+      </button>
+      <button className="fixed top-28" onClick={() => setClean(!clean)}>
+        clean
+      </button>
     </>
   );
 }
