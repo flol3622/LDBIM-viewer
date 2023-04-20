@@ -6,7 +6,7 @@ import { uiQuery } from "~/atoms";
 export default function Querrypannel() {
   const [tempQuery, setTempQuery] = useState("");
   const [queryValue, setQuery] = useRecoilState(uiQuery);
-  
+
   const handleQueryChange = (event: any) => {
     setTempQuery(event.target.value);
   };
@@ -17,18 +17,23 @@ export default function Querrypannel() {
   };
   return (
     <>
-      <div className="absolute bottom-4 left-4 h-[500px] w-[400px] rounded border bg-white p-2 pb-10 shadow-lg flex flex-col">
+      <div className="absolute bottom-4 left-4 flex h-[500px] w-[400px] flex-col rounded border bg-white p-2 pb-10 shadow-lg">
         <h3>Query</h3>
-        <hr/>
+        <hr />
         <textarea
           spellCheck="false"
           defaultValue={queryValue}
-          className="flex-grow text-xs"
+          className="flex-grow text-xs p-3"
           onChange={handleQueryChange}
-          />
+          style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+          }}
+        />
       </div>
-      <PaperPlaneIcon className="absolute bottom-8 left-8 cursor-pointer"
-      onClick={updateQuery}/>
+      <PaperPlaneIcon
+        className="absolute bottom-8 left-8 cursor-pointer"
+        onClick={updateQuery}
+      />
     </>
   );
 }
