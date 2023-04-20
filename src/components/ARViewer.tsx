@@ -61,17 +61,17 @@ export default function ARViewer() {
     const loaderTypes: LoaderType = {
       "https://w3id.org/fog#asGltf": {
         loader: gltfLoader,
-        params: { edges: true },
+        params: { edges: true , matrix: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]},
         litParam: "gltf",
       },
       "https://w3id.org/fog#asStl": {
         loader: stlLoader,
-        params: { edges: true, scale: [0.01, 0.01, 0.01] },
+        params: { edges: true, matrix: [0.001,0,0,0,0,0.001,0,0,0,0,0.001,0,0,0,0,1] },
         litParam: "stl",
       },
       "https://w3id.org/fog#asObj": {
         loader: objLoader,
-        params: { scale: [0.001, 0.001, 0.001] },
+        params: { matrix: [0.001,0,0,0,0.001,0,0,0,0,0.001,0,0,0,0,1] },
       },
     };
     // fetch the geometry to the viewer
