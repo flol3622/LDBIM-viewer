@@ -15,7 +15,7 @@ const uiQuery = atom<string>({
   #	?element omg:hasGeometry ?geometry .
   #	?geometry ?fog_geometry ?geometryData .
       ?element ?fog_geometry ?geometryData
-    FILTER(?fog_geometry IN (fog:asObj, fog:asStl, fog:asGltf)) 
+    FILTER(?fog_geometry IN (fog:asStl)) 
   	FILTER(datatype(?geometryData) = xsd:anyURI)
   } 
   #ORDER BY (?element) (?fog_geometry)

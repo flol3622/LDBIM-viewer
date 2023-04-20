@@ -6,32 +6,33 @@ import {
   Viewer,
 } from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { endpoint, uiQuery } from "~/atoms";
 
 export default function ARViewer() {
   const uiQueryValue = useRecoilValue(uiQuery);
   const endpointValue = useRecoilValue(endpoint);
+  const viewerRef = useRef<Viewer | null>(null);
 
   // --------------------------------
   // initialize the setup
   // --------------------------------
   useEffect(() => {
     // initialize the viewer
-    const viewer = new Viewer({
+    viewerRef.current = new Viewer({
       canvasId: "myCanvas",
       transparent: true,
     });
 
     // initialize the navcube
-    new NavCubePlugin(viewer, {
+    new NavCubePlugin(viewerRef.current, {
       canvasId: "myNavCubeCanvas",
       visible: true,
     });
 
     // identify the scene and camera
-    const scene = viewer.scene;
+    const scene = viewerRef.current;
     const camera = scene.camera;
     camera.projection = "perspective";
 
@@ -44,9 +45,9 @@ export default function ARViewer() {
     // });
 
     // initialize the loaders
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
-    const objLoader = new OBJLoaderPlugin(viewer, {});
-    const stlLoader = new STLLoaderPlugin(viewer);
+    const gltfLoader = new GLTFLoaderPlugin(viewerRef.current);
+    const objLoader = new OBJLoaderPlugin(viewerRef.current, {});
+    const stlLoader = new STLLoaderPlugin(viewerRef.current);
 
     // Define loaders for each format
     type LoaderType = {
@@ -65,12 +66,12 @@ export default function ARViewer() {
       },
       "https://w3id.org/fog#asStl": {
         loader: stlLoader,
-        params: { edges: true },
+        params: { edges: true, scale: [0.01, 0.01, 0.01] },
         litParam: "stl",
       },
       "https://w3id.org/fog#asObj": {
         loader: objLoader,
-        params: { scale: [0.001, 0.001, 0.001]},
+        params: { scale: [0.001, 0.001, 0.001] },
       },
     };
     // fetch the geometry to the viewer
@@ -107,19 +108,27 @@ export default function ARViewer() {
           dataType === "http://www.w3.org/2001/XMLSchema#string" &&
           loaderType.litParam
         ) {
-          loaderType.loader.load({
+          const sceneModel = loaderType.loader.load({
             ...loaderType.params,
             id: element,
             [loaderType.litParam]: data,
+          });
+          sceneModel.on("loaded", () => {
+            console.log("loaded uri of format:", format);
+            viewerRef.current?.cameraFlight.flyTo(sceneModel);
           });
         }
 
         // if the data is a uri
         else if (dataType === "http://www.w3.org/2001/XMLSchema#anyURI") {
-          loaderType.loader.load({
+          const sceneModel = loaderType.loader.load({
             ...loaderType.params,
             id: element,
             src: data,
+          });
+          sceneModel.on("loaded", () => {
+            console.log("loaded uri of format:", format);
+            viewerRef.current?.cameraFlight.flyTo(sceneModel);
           });
         }
 
