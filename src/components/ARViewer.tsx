@@ -36,12 +36,12 @@ export default function ARViewer() {
     camera.projection = "perspective";
 
     // log the camera position
-    camera.on("viewMatrix", function (matrix: any) {
-      console.log("eye", camera.eye);
-      console.log("look", camera.look);
-      console.log("up", camera.up);
-      console.log("testje", matrix);
-    });
+    // camera.on("viewMatrix", function (matrix: any) {
+    //   console.log("eye", camera.eye);
+    //   console.log("look", camera.look);
+    //   console.log("up", camera.up);
+    //   console.log("testje", matrix);
+    // });
 
     // initialize the loaders
     const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -70,7 +70,7 @@ export default function ARViewer() {
       },
       "https://w3id.org/fog#asObj": {
         loader: objLoader,
-        params: {},
+        params: { scale: [0.001, 0.001, 0.001]},
       },
     };
     // fetch the geometry to the viewer
@@ -102,7 +102,7 @@ export default function ARViewer() {
 
       // check if the format is supported
       if (loaderType) {
-        // if the data is a literal, or can be converted to a blob
+        // if the data is a literal, and is supported
         if (
           dataType === "http://www.w3.org/2001/XMLSchema#string" &&
           loaderType.litParam
@@ -114,7 +114,7 @@ export default function ARViewer() {
           });
         }
 
-        // if the data is an uri
+        // if the data is a uri
         else if (dataType === "http://www.w3.org/2001/XMLSchema#anyURI") {
           loaderType.loader.load({
             ...loaderType.params,
