@@ -32,14 +32,9 @@ export default function ARViewer() {
   // --------------------------------
   // initialize the setup
   // --------------------------------
+
   useEffect(() => {
-    viewerRef.current?.scene.clear();
-    // destroy every loader in the loaderTypesRef
-    if (loaderTypesRef.current) {
-      for (const key in loaderTypesRef.current) {
-        loaderTypesRef.current[key]?.loader.destroy();
-      }
-    }
+    viewerRef.current?.scene.clear()
     // initialize the viewer
     viewerRef.current = new Viewer({
       canvasId: "myCanvas",
@@ -156,10 +151,8 @@ export default function ARViewer() {
   }
 
   function select() {
-    viewerRef.current?.scene.setObjectsSelected(
-      ["https://172.16.10.122:8080/projects/1001/floor_1xS3BCk291UvhgP2dvNYcU"],
-      true
-    );
+    console.log(viewerRef.current?.scene);
+    viewerRef.current?.scene.models["https://172.16.10.122:8080/projects/1001/floor_1xS3BCk291UvhgP2dvNYcU"]?.destroy();
     console.log("testje");
   }
 
