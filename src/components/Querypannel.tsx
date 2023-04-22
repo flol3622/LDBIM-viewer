@@ -1,20 +1,16 @@
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { uiQuery } from "~/atoms";
 
 export default function Querrypannel() {
-  const [tempQuery, setTempQuery] = useState("");
   const [queryValue, setQuery] = useRecoilState(uiQuery);
+  const [tempQuery, setTempQuery] = useState("");
 
-  const handleQueryChange = (event: any) => {
-    setTempQuery(event.target.value);
-  };
+  useEffect(() => {
+    setTempQuery(queryValue);
+  }, []);
 
-  const updateQuery = () => {
-    setQuery(tempQuery);
-    console.log("updated Query:", queryValue);
-  };
   return (
     <>
       <div className="absolute bottom-4 left-4 flex h-[500px] w-[400px] flex-col rounded border bg-white p-2 pb-10 shadow-lg">
@@ -22,9 +18,9 @@ export default function Querrypannel() {
         <hr />
         <textarea
           spellCheck="false"
-          defaultValue={queryValue}
-          className="flex-grow text-xs p-3"
-          onChange={handleQueryChange}
+          defaultValue={tempQuery}
+          className="flex-grow p-3 text-xs"
+          onChange={(e) => setTempQuery(e.target.value)}
           style={{
             fontFamily: '"Fira code", "Fira Mono", monospace',
           }}
@@ -32,7 +28,10 @@ export default function Querrypannel() {
       </div>
       <PaperPlaneIcon
         className="absolute bottom-8 left-8 cursor-pointer"
-        onClick={updateQuery}
+        onClick={() => {
+          setQuery(tempQuery);
+          console.log("queryValue", queryValue);
+        }}
       />
     </>
   );
