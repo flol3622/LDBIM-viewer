@@ -2,18 +2,17 @@ import {
   GLTFLoaderPlugin,
   NavCubePlugin,
   OBJLoaderPlugin,
-  Plugin,
   STLLoaderPlugin,
   Viewer,
 } from "@xeokit/xeokit-sdk";
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { TypeOf } from "zod";
-import { endpoint, uiQuery } from "~/atoms";
+import { useEffect, useRef } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { cleanStart, endpoint, freezing, uiQuery } from "~/atoms";
 
 export default function ARViewer() {
-  const [clean, setClean] = useState<boolean>(false);
+  const clean = useRecoilValue(cleanStart);
+  const setFreeze = useSetRecoilState(freezing);
   const uiQueryValue = useRecoilValue(uiQuery);
   const endpointValue = useRecoilValue(endpoint);
 
@@ -34,7 +33,11 @@ export default function ARViewer() {
   // --------------------------------
 
   useEffect(() => {
-    viewerRef.current?.scene.clear()
+    // freeze the query and endpoint inputs
+    setFreeze(true);
+    // clear the existing canvas
+    viewerRef.current?.scene.clear();
+
     // initialize the viewer
     viewerRef.current = new Viewer({
       canvasId: "myCanvas",
@@ -75,18 +78,17 @@ export default function ARViewer() {
       },
     };
     console.log("initialized");
+    setFreeze(false);
   }, [clean]);
 
   // --------------------------------
   // Fetch geometry when uiQueryValue or endpointValue changes
   // --------------------------------
   useEffect(() => {
-    if (viewerRef.current && loaderTypesRef.current) {
-      // fetch the geometry to the viewer
+    if (endpointValue) {
       getGeometry();
     }
-  }, [uiQueryValue, endpointValue, viewerRef, loaderTypesRef]);
-
+  }, [uiQueryValue, endpointValue]);
 
   // --------------------------------
   // fetching function
@@ -152,7 +154,9 @@ export default function ARViewer() {
 
   function select() {
     console.log(viewerRef.current?.scene);
-    viewerRef.current?.scene.models["https://172.16.10.122:8080/projects/1001/floor_1xS3BCk291UvhgP2dvNYcU"]?.destroy();
+    viewerRef.current?.scene.models[
+      "https://172.16.10.122:8080/projects/1001/floor_1xS3BCk291UvhgP2dvNYcU"
+    ]?.destroy();
     console.log("testje");
   }
 
@@ -167,16 +171,13 @@ export default function ARViewer() {
 
   return (
     <>
-      <canvas id="myCanvas" className="h-full w-full"></canvas>
+      <canvas id="myCanvas" className="mt-2 h-full w-full"></canvas>
       <canvas
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
       ></canvas>
       <button className="fixed top-20" onClick={() => select()}>
         test
-      </button>
-      <button className="fixed top-28" onClick={() => setClean(!clean)}>
-        clean
       </button>
     </>
   );

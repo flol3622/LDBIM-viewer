@@ -1,6 +1,8 @@
-import location from "./location";
-import uiQuery from "./query";
+import cleanStart from "./cleanStart";
+import { defaultEndpoints, endpoint } from "./endpoint";
 import freezing from "./freezing";
-import { endpoint, defaultEndpoints } from "./endpoint";
+import location from "./location";
+import uiQuery from "./uiQuery";
 
-export { uiQuery, location, endpoint, freezing, defaultEndpoints };
+export { uiQuery, location, endpoint, freezing, defaultEndpoints, cleanStart };
+

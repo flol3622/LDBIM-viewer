@@ -15,9 +15,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {/* <div className="absolute top-14 h-[calc(100vh-3.5rem)] w-full overflow-hidden">
+        <div className="absolute top-14 h-[calc(100vh-3.5rem)] w-full overflow-hidden">
           <ARViewer />
-        </div> */}
+        </div>
         <Navbar />
         <Querrypannel/>
       </main>
