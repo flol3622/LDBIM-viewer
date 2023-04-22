@@ -1,10 +1,11 @@
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { uiQuery } from "~/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { freezing, uiQuery } from "~/atoms";
 
 export default function Querrypannel() {
+  const freezingValue = useRecoilValue(freezing);
   const [queryValue, setQuery] = useRecoilState(uiQuery);
   const [tempQuery, setTempQuery] = useState("");
 
@@ -38,10 +39,19 @@ export default function Querrypannel() {
           padding: "0.5rem",
           fontFamily: '"Fira code", "Fira Mono", monospace',
           fontSize: "0.7rem",
+          opacity: freezingValue ? 0.3 : 1,
         }}
+        disabled={freezingValue}
         onChange={(e) => setTempQuery(e.target.value)}
         onKeyDown={handleKeyDown}
       />
+      {freezingValue && (
+        <div className="absolute flex h-full w-full items-center justify-center ">
+          <p className="bg-white p-2 ">
+            Query is frozen while the viewer is initializing
+          </p>
+        </div>
+      )}
       <div className="my-2 flex w-full items-center justify-between gap-2 px-2 ">
         <PaperPlaneIcon className="cursor-pointer" onClick={updateQuery} />
         <p className="text-sm opacity-50">shortcut: Shift + Enter</p>

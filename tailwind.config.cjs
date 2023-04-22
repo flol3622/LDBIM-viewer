@@ -4,9 +4,13 @@ module.exports = {
   theme: {
     colors: {
       ugent: "#1E64C8",
-      "white": "#FFFFFF",
+      white: "#FFFFFF",
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        body: ["var(--fontBody)"],
+      },
+    },
     plugins: [],
   },
 };
