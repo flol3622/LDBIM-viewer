@@ -154,23 +154,23 @@ export default function ARViewer() {
         <${id}> <${format}> ?geometryData .
       }
       LIMIT 1`;
-  
+
     return new Promise(async (resolve, reject) => {
       try {
         const bindingsStream = await myfetcher.current.fetchBindings(
           endpointValue,
           geometryQuery
         );
-  
+
         bindingsStream.on("data", (bindings: any): void => {
           const data = bindings.geometryData.value;
           resolve(data);
         });
-  
+
         bindingsStream.on("error", (error: any): void => {
           reject(error);
         });
-  
+
         bindingsStream.on("end", (): void => {
           reject(new Error("No data found"));
         });
@@ -179,7 +179,6 @@ export default function ARViewer() {
       }
     });
   }
-  
 
   // fetch the main query
   async function loadGeometry() {
@@ -192,78 +191,63 @@ export default function ARViewer() {
 
     // for every incoming result, load the geometry
     bindingsStream.on("data", (bindings: any) => {
-      const entry = {
-        id: bindings.element.value,
-        metadata: {
-          format: bindings.fog_geometry.value,
-          datatype: bindings.geometryData.datatype.value,
-        },
-      } as EntryLRU;
+      try {
+        const entry = {
+          id: bindings.element.value,
+          metadata: {
+            format: bindings.fog_geometry.value,
+            datatype: bindings.geometryData.datatype.value,
+          },
+        } as EntryLRU;
 
-      // cache management, stop if needed
-      if (!evalLoadLRU(entry)) return;
+        // cache management, stop if needed
+        if (!evalLoadLRU(entry)) return;
 
-      // else fetch geometry data
-      const loaderType = loaderTypesRef.current?.[entry.metadata.format];
-      // const data = fetchGeometryData(entry.id, entry.metadata.format);
-      fetchGeometryData(entry.id, entry.metadata.format).then((data) => {
-        console.log(data);
-        // if the data is a literal, and is supported
-        if (
-          entry.metadata.datatype ===
-            "http://www.w3.org/2001/XMLSchema#string" &&
-          loaderType?.litParam
-        ) {
-          const sceneModel = loaderType.loader.load({
-            ...loaderType.params,
-            id: entry.id,
-            [loaderType.litParam]: data,
+        // else fetch geometry data
+        const loaderType = loaderTypesRef.current?.[entry.metadata.format];
+        // const data = fetchGeometryData(entry.id, entry.metadata.format);
+        fetchGeometryData(entry.id, entry.metadata.format)
+          .then((data) => {
+            console.log(data);
+            // if the data is a literal, and is supported
+            if (
+              entry.metadata.datatype ===
+                "http://www.w3.org/2001/XMLSchema#string" &&
+              loaderType?.litParam
+            ) {
+              loaderType.loader.load({
+                ...loaderType.params,
+                id: entry.id,
+                [loaderType.litParam]: data,
+              });
+            }
+            // if the data is a uri, and is supported
+            else if (
+              entry.metadata.datatype ===
+                "http://www.w3.org/2001/XMLSchema#anyURI" &&
+              loaderType?.uriParam
+            ) {
+              loaderType.loader.load({
+                ...loaderType.params,
+                id: entry.id,
+                [loaderType.uriParam]: data,
+              });
+            }
+            // if the data source is not supported
+            else console.log("unsupported / undefined data source", entry.id);
+          })
+          .catch((error) => {
+            console.error("Error fetching geometry data:", error);
           });
-          sceneModel.on("loaded", () => {
-            console.log("loaded from literal");
-          });
-        }
-        // if the data is a uri, and is supported
-        else if (
-          entry.metadata.datatype ===
-            "http://www.w3.org/2001/XMLSchema#anyURI" &&
-          loaderType?.uriParam
-        ) {
-          const sceneModel = loaderType.loader.load({
-            ...loaderType.params,
-            id: entry.id,
-            [loaderType.uriParam]: data,
-          });
-          sceneModel.on("loaded", () => {
-            console.log("loaded from uri");
-          });
-        }
-        // if the data source is not supported
-        else console.log("unsupported / undefined data source", entry.id);
-      });
+      } catch (error) {
+        console.error("Error loading geometry:", error);
+      }
     });
   }
 
   function destroyGeometry(id: string) {
     viewerRef.current?.scene.models[id]?.destroy();
   }
-
-  function select() {
-    console.log(viewerRef.current?.scene);
-    viewerRef.current?.scene.models[
-      "https://172.16.10.122:8080/projects/1001/floor_1xS3BCk291UvhgP2dvNYcU"
-    ]?.destroy();
-    console.log("testje");
-  }
-
-  const viewer = viewerRef.current;
-  viewer?.scene.input.on("mouseclicked", function (coords) {
-    var hit = viewer.scene.pick({
-      canvasPos: coords,
-    });
-
-    console.log(hit);
-  });
 
   return (
     <>
@@ -272,9 +256,6 @@ export default function ARViewer() {
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
       ></canvas>
-      <button className="fixed top-20" onClick={() => select()}>
-        test
-      </button>
     </>
   );
 }
