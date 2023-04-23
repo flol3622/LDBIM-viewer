@@ -148,20 +148,38 @@ export default function ARViewer() {
   const myfetcher = useRef(new SparqlEndpointFetcher());
 
   // fetch data of a single instance
-  async function fetchGeometryData(id: any, format: Format) {
+  async function fetchGeometryData(id: any, format: Format): Promise<string> {
     const geometryQuery = `SELECT ?geometryData 
       WHERE {
         <${id}> <${format}> ?geometryData .
       }
       LIMIT 1`;
-    const bindingsStream = await myfetcher.current.fetchBindings(
-      endpointValue,
-      geometryQuery
-    );
-    bindingsStream.on("data", (bindings: any) => {
-      return bindings.geometryData.value;
+  
+    return new Promise(async (resolve, reject) => {
+      try {
+        const bindingsStream = await myfetcher.current.fetchBindings(
+          endpointValue,
+          geometryQuery
+        );
+  
+        bindingsStream.on("data", (bindings: any): void => {
+          const data = bindings.geometryData.value;
+          resolve(data);
+        });
+  
+        bindingsStream.on("error", (error: any): void => {
+          reject(error);
+        });
+  
+        bindingsStream.on("end", (): void => {
+          reject(new Error("No data found"));
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
   }
+  
 
   // fetch the main query
   async function loadGeometry() {
@@ -182,47 +200,47 @@ export default function ARViewer() {
         },
       } as EntryLRU;
 
-      // cache management, do nothing if needed
+      // cache management, stop if needed
       if (!evalLoadLRU(entry)) return;
 
+      // else fetch geometry data
       const loaderType = loaderTypesRef.current?.[entry.metadata.format];
-      // if the data is a literal, and is supported
-      if (
-        entry.metadata.datatype === "http://www.w3.org/2001/XMLSchema#string" &&
-        loaderType?.litParam
-      ) {
-        const sceneModel = loaderType.loader.load({
-          ...loaderType.params,
-          id: entry.id,
-          [loaderType.litParam]: fetchGeometryData(
-            entry.id,
-            entry.metadata.format
-          ),
-        });
-        sceneModel.on("loaded", () => {
-          console.log("loaded from literal");
-        });
-      }
-      // if the data is a uri, and is supported
-      else if (
-        entry.metadata.datatype === "http://www.w3.org/2001/XMLSchema#anyURI" &&
-        loaderType?.uriParam
-      ) {
-        console.log("loading from uri");
-        const sceneModel = loaderType.loader.load({
-          ...loaderType.params,
-          id: entry.id,
-          [loaderType.uriParam]: fetchGeometryData(
-            entry.id,
-            entry.metadata.format
-          ),
-        });
-        sceneModel.on("loaded", () => {
-          console.log("loaded from uri");
-        });
-      }
-      // if the data source is not supported
-      else console.log("unsupported / undefined data source", entry.id);
+      // const data = fetchGeometryData(entry.id, entry.metadata.format);
+      fetchGeometryData(entry.id, entry.metadata.format).then((data) => {
+        console.log(data);
+        // if the data is a literal, and is supported
+        if (
+          entry.metadata.datatype ===
+            "http://www.w3.org/2001/XMLSchema#string" &&
+          loaderType?.litParam
+        ) {
+          const sceneModel = loaderType.loader.load({
+            ...loaderType.params,
+            id: entry.id,
+            [loaderType.litParam]: data,
+          });
+          sceneModel.on("loaded", () => {
+            console.log("loaded from literal");
+          });
+        }
+        // if the data is a uri, and is supported
+        else if (
+          entry.metadata.datatype ===
+            "http://www.w3.org/2001/XMLSchema#anyURI" &&
+          loaderType?.uriParam
+        ) {
+          const sceneModel = loaderType.loader.load({
+            ...loaderType.params,
+            id: entry.id,
+            [loaderType.uriParam]: data,
+          });
+          sceneModel.on("loaded", () => {
+            console.log("loaded from uri");
+          });
+        }
+        // if the data source is not supported
+        else console.log("unsupported / undefined data source", entry.id);
+      });
     });
   }
 
