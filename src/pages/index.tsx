@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { Navbar, Querrypannel } from "~/components";
+import { Navbar, Querypannel } from "~/components";
 
 const ARViewer = dynamic(() => import("~/components/ARViewer"), {
   ssr: false,
@@ -19,7 +19,7 @@ export default function Home() {
           <ARViewer />
         </div>
         <Navbar />
-        <Querrypannel/>
+        <Querypannel/>
       </main>
     </>
   );

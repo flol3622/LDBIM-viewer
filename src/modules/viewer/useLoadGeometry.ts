@@ -4,12 +4,12 @@ import { EntryLRU } from "../useCacheManagement";
 import { LoaderType } from "./useInitViewer";
 
 async function loadGeometry(
-  uiQuerry: string,
+  uiQuery: string,
   endpoint: string,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>,
   evalLRU: (entry: EntryLRU) => boolean
 ) {
-  await getEntities(uiQuerry, endpoint, (bindings: any) => {
+  await getEntities(uiQuery, endpoint, (bindings: any) => {
     try {
       const entry = {
         id: bindings.element.value,
@@ -64,7 +64,7 @@ async function loadGeometry(
 }
 
 export function useLoadGeometry(
-  uiQuerry: string,
+  uiQuery: string,
   endpoint: string,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>,
   evalLRU: (entry: EntryLRU) => boolean
@@ -72,7 +72,7 @@ export function useLoadGeometry(
   useEffect(() => {
     if (endpoint) {
       // ensures no loading on first render
-      loadGeometry(uiQuerry, endpoint, loaderTypes, evalLRU);
+      loadGeometry(uiQuery, endpoint, loaderTypes, evalLRU);
     }
-  }, [endpoint, uiQuerry]);
+  }, [endpoint, uiQuery]);
 }

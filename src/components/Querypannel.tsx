@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { freezing, uiQuery } from "~/atoms";
 
-export default function Querrypannel() {
+export default function Querypannel() {
   const freezingValue = useRecoilValue(freezing);
   const [queryValue, setQuery] = useRecoilState(uiQuery);
   const [tempQuery, setTempQuery] = useState("");
