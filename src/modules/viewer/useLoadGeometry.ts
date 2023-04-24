@@ -26,7 +26,6 @@ async function loadGeometry(
       const loaderType = loaderTypes.current?.[entry.metadata.format];
       getGeometry(entry.id, entry.metadata.format, endpoint)
         .then((data) => {
-          console.log(data);
           // if the data is a literal, and is supported
           if (
             entry.metadata.datatype ===

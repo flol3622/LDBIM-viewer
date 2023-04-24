@@ -12,12 +12,15 @@ export type EntryLRU = {
   metadata: MetadataLRU;
 };
 
-export function useCacheManagement(limit: number, viewer: Viewer | undefined) {
+export function useCacheManagement(
+  limit: number,
+  viewer: React.MutableRefObject<Viewer | undefined>
+) {
   const LRU = useRef<LRUMap<string, MetadataLRU>>(new LRUMap(limit));
 
   LRU.current.shift = function () {
     let entry = LRUMap.prototype.shift.call(this);
-    viewer?.scene.models[entry?.[0]]?.destroy();
+    viewer.current?.scene.models[entry?.[0]]?.destroy();
     return entry;
   };
 

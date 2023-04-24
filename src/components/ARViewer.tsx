@@ -19,14 +19,24 @@ export default function ARViewer() {
   // LRU cache management
   const { clearLRU, evalLRU } = useCacheManagement(
     lruLimitValue,
-    viewerRef.current
+    viewerRef
   );
 
   // initialize the setup
-  useInitViewer(viewerRef.current, loaderTypesRef, clean, setFreeze);
+  useInitViewer(viewerRef, loaderTypesRef, clean, setFreeze);
 
   // fetch the main query
   useLoadGeometry(uiQueryValue, endpointValue, loaderTypesRef, evalLRU);
+
+  function setCamera() {
+    // set the camera position
+    console.log(viewerRef);
+    console.log(loaderTypesRef);
+    if (viewerRef.current) {
+      console.log(viewerRef.current.camera.eye);
+      viewerRef.current.scene.camera.eye = [0, 10, 10];
+    }
+  }
 
   return (
     <>
@@ -35,6 +45,12 @@ export default function ARViewer() {
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
       ></canvas>
+      <button
+        className="fixed top-24 left-0 z-10"
+        onClick={setCamera}
+      >
+        Set Camera
+      </button>
     </>
   );
 }
