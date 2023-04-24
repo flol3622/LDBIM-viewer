@@ -6,8 +6,8 @@ interface LRUWithFilter extends LRUMap<string, any> {
 }
 
 function findRoom(viewer: Viewer, position: number[], lru: LRUWithFilter) {
-  const down = [0, 0, -1];
-  const up = [0, 0, 1];
+  const down = [0, -1, 0];
+  const up = [0, 1, 0];
   const rooms = lru.filter((key) => key.startsWith("room"));
 
   function pick(direction: number[]) {

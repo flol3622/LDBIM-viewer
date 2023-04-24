@@ -28,13 +28,9 @@ export default function ARViewer() {
   // fetch the main query
   useLoadGeometry(uiQueryValue, endpointValue, loaderTypesRef, evalLRU);
 
-  function setCamera() {
-    // set the camera position
-    console.log(viewerRef);
-    console.log(loaderTypesRef);
+  function test() {
     if (viewerRef.current) {
-      console.log(viewerRef.current.camera.eye);
-      viewerRef.current.scene.camera.eye = [0, 10, 10];
+      viewerRef.current.scene.camera.eye = [0, 30, 1];
     }
   }
 
@@ -47,9 +43,9 @@ export default function ARViewer() {
       ></canvas>
       <button
         className="fixed top-24 left-0 z-10"
-        onClick={setCamera}
+        onClick={test}
       >
-        Set Camera
+        test
       </button>
     </>
   );
