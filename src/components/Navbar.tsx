@@ -4,7 +4,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { GitHubLogoIcon, RocketIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { cleanStart, defaultEndpoints, endpoint, freezing } from "~/atoms";
+import { cleanStart, defaultEndpoints, endpoint, freezing } from "~/modules/atoms";
 import Divider from "./Divider";
 
 export default function Navbar() {

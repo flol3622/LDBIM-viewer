@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { getEntities, getGeometry } from "../fetchSPARQL";
-import { EntryLRU } from "../useCacheManagement";
+import { EntryLRU, useCacheManagement } from "../useCacheManagement";
 import { LoaderType } from "./useInitViewer";
+import { useRecoilValue } from "recoil";
+import { endpoint, query } from "../atoms";
+import { Viewer } from "@xeokit/xeokit-sdk";
 
 async function loadGeometry(
   query: string,
@@ -63,15 +66,17 @@ async function loadGeometry(
 }
 
 export function useLoadGeometry(
-  query: string,
-  endpoint: string,
-  loaderTypes: React.MutableRefObject<LoaderType | undefined>,
-  evalLRU: (entry: EntryLRU) => boolean
+  viewer: React.MutableRefObject<Viewer | undefined>,
+  loaderTypes: React.MutableRefObject<LoaderType | undefined>
 ) {
+  const queryValue = useRecoilValue(query);
+  const endpointValue = useRecoilValue(endpoint);
+  const { evalLRU } = useCacheManagement(viewer);
+
   useEffect(() => {
-    if (endpoint) {
+    if (endpointValue) {
       // ensures no loading on first render
-      loadGeometry(query, endpoint, loaderTypes, evalLRU);
+      loadGeometry(queryValue, endpointValue, loaderTypes, evalLRU);
     }
-  }, [endpoint, query]);
+  }, [endpointValue, queryValue]);
 }

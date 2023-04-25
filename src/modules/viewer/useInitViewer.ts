@@ -6,6 +6,8 @@ import {
   Viewer,
 } from "@xeokit/xeokit-sdk";
 import { useEffect } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { cleanStart, freezing } from "../atoms";
 
 export type LoaderType = {
   [key: string]: {
@@ -18,10 +20,11 @@ export type LoaderType = {
 
 export function useInitViewer(
   viewer: React.MutableRefObject<Viewer | undefined>,
-  loaderTypes: React.MutableRefObject<LoaderType | undefined>,
-  clean: any,
-  setFreeze: (state: boolean) => void
+  loaderTypes: React.MutableRefObject<LoaderType | undefined>
 ) {
+  const clean = useRecoilValue(cleanStart);
+  const setFreeze = useSetRecoilState(freezing);
+
   useEffect(() => {
     // freeze the query and endpoint inputs
     setFreeze(true);

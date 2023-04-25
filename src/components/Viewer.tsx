@@ -1,30 +1,18 @@
 import { Viewer } from "@xeokit/xeokit-sdk";
 import { useRef } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { cleanStart, endpoint, freezing, lruLimit, query } from "~/atoms";
 import useAutomations from "~/modules/automations/useAutomations";
-import { useCacheManagement } from "~/modules/useCacheManagement";
 import { LoaderType, useInitViewer } from "~/modules/viewer/useInitViewer";
 import { useLoadGeometry } from "~/modules/viewer/useLoadGeometry";
 
 export default function ARViewer() {
-  const clean = useRecoilValue(cleanStart);
-  const queryValue = useRecoilValue(query);
-  const setFreeze = useSetRecoilState(freezing);
-  const endpointValue = useRecoilValue(endpoint);
-  const lruLimitValue = useRecoilValue(lruLimit);
-
   const viewerRef = useRef<Viewer>();
   const loaderTypesRef = useRef<LoaderType>();
 
-  // LRU cache management
-  const { evalLRU } = useCacheManagement(lruLimitValue, viewerRef, clean);
-
   // initialize the setup
-  useInitViewer(viewerRef, loaderTypesRef, clean, setFreeze);
+  useInitViewer(viewerRef, loaderTypesRef);
 
   // fetch the main query
-  useLoadGeometry(queryValue, endpointValue, loaderTypesRef, evalLRU);
+  useLoadGeometry(viewerRef, loaderTypesRef);
 
   // automatic querries
   useAutomations(viewerRef);

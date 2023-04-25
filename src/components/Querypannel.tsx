@@ -3,8 +3,8 @@ import { ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
 import { Cross1Icon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { autoMode, freezing, query } from "~/atoms";
-import { QueryMode } from "~/atoms/query";
+import { autoMode, freezing, query } from "~/modules/atoms";
+import { QueryMode } from "~/modules/atoms/query";
 import Divider from "./Divider";
 
 export default function Querypannel() {

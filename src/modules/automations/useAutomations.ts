@@ -1,7 +1,7 @@
 import { Viewer } from "@xeokit/xeokit-sdk";
 import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { autoMode, query } from "~/atoms";
+import { autoMode, query } from "~/modules/atoms";
 import GeoSPARQLauto from "./GeoSPARQL";
 
 export default function useAutomations(
