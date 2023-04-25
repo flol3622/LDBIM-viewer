@@ -1,8 +1,8 @@
 import cleanStart from "./cleanStart";
 import { defaultEndpoints, endpoint } from "./endpoint";
-import {freezing} from "./ui";
-import { query, autoMode } from "./query";
 import lruLimit from "./lru";
+import { autoMode, query } from "./query";
+import { closeQuery, freezing } from "./ui";
 
 export {
   query,
@@ -12,4 +12,6 @@ export {
   defaultEndpoints,
   cleanStart,
   lruLimit,
+  closeQuery,
 };
+
