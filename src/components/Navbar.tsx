@@ -2,7 +2,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { TextField, Tooltip } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import { RocketIcon, TrashIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { cleanStart, defaultEndpoints, endpoint, freezing } from "~/atoms";
 
@@ -36,6 +36,7 @@ export default function Navbar() {
         </Tooltip>
         <Divider />
         <Autocomplete
+          key={clean.toString()}
           disabled={freezingValue}
           size="small"
           sx={{ flexGrow: 1, maxWidth: 600 }}

@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { Navbar, Querypannel } from "~/components";
 
-const ARViewer = dynamic(() => import("~/components/ARViewer"), {
+const Viewer = dynamic(() => import("~/components/Viewer"), {
   ssr: false,
 });
 
@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
       <main>
         <div className="absolute top-14 h-[calc(100vh-3.5rem)] w-full overflow-hidden">
-          <ARViewer />
+          <Viewer />
         </div>
         <Navbar />
         <Querypannel/>

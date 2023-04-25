@@ -21,4 +21,9 @@ where {
 #LIMIT 20`,
 });
 
-export default uiQuery;
+const autoMode = atom<null | "BOT" | "GEO">({
+  key: "autoMode",
+  default: null,
+});
+
+export { uiQuery, autoMode };

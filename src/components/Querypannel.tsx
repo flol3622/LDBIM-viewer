@@ -3,6 +3,7 @@ import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { freezing, uiQuery } from "~/atoms";
+import { Switch } from "@mui/material";
 
 export default function Querypannel() {
   const freezingValue = useRecoilValue(freezing);
@@ -26,7 +27,13 @@ export default function Querypannel() {
 
   return (
     <div className="absolute bottom-4 left-4 flex w-[400px] flex-col rounded border bg-white p-2 shadow-lg">
-      <h3 className="pb-1">Query</h3>
+      <div className="flex justify-between">
+        <h3 className="pb-1">Query</h3>
+        <div>
+          
+          <Switch/>
+        </div>
+      </div>
       <hr />
       <TextareaAutosize
         minRows={4}

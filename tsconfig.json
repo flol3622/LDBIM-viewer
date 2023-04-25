@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-, "src/components/ARViewer.tsx"  ],
+, "src/components/Viewer.tsx"  ],
   "exclude": ["node_modules"]
 }
