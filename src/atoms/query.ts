@@ -1,6 +1,7 @@
+import { type } from "os";
 import { atom } from "recoil";
 
-const uiQuery = atom<string>({
+const query = atom<string>({
   key: "uiQuery",
   default: `PREFIX bot: <https://w3id.org/bot#>
 PREFIX fog: <https://w3id.org/fog#>
@@ -21,9 +22,11 @@ where {
 #LIMIT 20`,
 });
 
-const autoMode = atom<null | "BOT" | "GEO">({
+export type QueryMode = null | "BOT" | "GEO";
+
+const autoMode = atom<QueryMode>({
   key: "autoMode",
   default: null,
 });
 
-export { uiQuery, autoMode };
+export { query , autoMode };

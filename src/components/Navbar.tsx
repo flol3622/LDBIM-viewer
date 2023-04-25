@@ -1,14 +1,11 @@
 import InfoIcon from "@mui/icons-material/Info";
 import { TextField, Tooltip } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import { RocketIcon, TrashIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { GitHubLogoIcon, RocketIcon, TrashIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { cleanStart, defaultEndpoints, endpoint, freezing } from "~/atoms";
-
-function Divider() {
-  return <div className="border-black self-stretch border-l border-dashed" />;
-}
+import Divider from "./Divider";
 
 export default function Navbar() {
   const [clean, setClean] = useRecoilState(cleanStart);
@@ -68,9 +65,12 @@ export default function Navbar() {
       </h1>
 
       <Tooltip title="info">
-        <div className="mx-2 flex items-center">
-          <InfoIcon />
-        </div>
+        <a
+          className="mx-2 flex cursor-pointer items-center"
+          href="https://github.com/flol3622/AR-Linked-BIM-viewer"
+        >
+          <GitHubLogoIcon height={20} width={20} />
+        </a>
       </Tooltip>
     </div>
   );

@@ -2,11 +2,11 @@ import cleanStart from "./cleanStart";
 import { defaultEndpoints, endpoint } from "./endpoint";
 import freezing from "./freezing";
 import location from "./location";
-import { uiQuery, autoMode } from "./uiQuery";
+import { query, autoMode } from "./query";
 import lruLimit from "./lru";
 
 export {
-  uiQuery,
+  query,
   autoMode,
   location,
   endpoint,
