@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { getEntities, getGeometry } from "../fetchSPARQL";
-import { EntryLRU, useCacheManagement } from "../useCacheManagement";
+import useCacheManagement, { EntryLRU } from "../useCacheManagement";
 import { LoaderType } from "./useInitViewer";
 import { useRecoilValue } from "recoil";
 import { endpoint, query } from "../atoms";
@@ -65,7 +65,7 @@ async function loadGeometry(
   });
 }
 
-export function useLoadGeometry(
+export default function useLoadGeometry(
   viewer: React.MutableRefObject<Viewer | undefined>,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>
 ) {

@@ -18,7 +18,7 @@ export type LoaderType = {
   };
 };
 
-export function useInitViewer(
+export default function useInitViewer(
   viewer: React.MutableRefObject<Viewer | undefined>,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>
 ) {

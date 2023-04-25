@@ -1,4 +1,3 @@
-import { type } from "os";
 import { atom } from "recoil";
 
 const query = atom<string>({
@@ -29,4 +28,5 @@ const autoMode = atom<QueryMode>({
   default: null,
 });
 
-export { query , autoMode };
+export { query, autoMode };
+

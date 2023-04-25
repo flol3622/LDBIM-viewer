@@ -1,8 +1,7 @@
 import { Viewer } from "@xeokit/xeokit-sdk";
 import { useRef } from "react";
-import useAutomations from "~/modules/automations/useAutomations";
-import { LoaderType, useInitViewer } from "~/modules/viewer/useInitViewer";
-import { useLoadGeometry } from "~/modules/viewer/useLoadGeometry";
+import { useAutomations } from "~/modules/automations";
+import { LoaderType, useInitViewer, useLoadGeometry } from "~/modules/viewer";
 
 export default function ARViewer() {
   const viewerRef = useRef<Viewer>();
@@ -11,7 +10,7 @@ export default function ARViewer() {
   // initialize the setup
   useInitViewer(viewerRef, loaderTypesRef);
 
-  // fetch the main query
+  // fetch the input query
   useLoadGeometry(viewerRef, loaderTypesRef);
 
   // automatic querries

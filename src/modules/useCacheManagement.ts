@@ -14,7 +14,7 @@ export type EntryLRU = {
   metadata: MetadataLRU;
 };
 
-export function useCacheManagement(
+export default function useCacheManagement(
   viewer: React.MutableRefObject<Viewer | undefined>
 ) {
   const clean = useRecoilValue(cleanStart);
