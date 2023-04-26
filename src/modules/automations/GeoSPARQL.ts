@@ -8,7 +8,7 @@ export default function GeoSPARQLauto(
     const eye = viewer.current?.scene.camera.eye;
     if (eye && eye[0] && eye[2]) {
       const xcoord = Math.round(eye[0] * 1000).toString();
-      const ycoord = Math.round(eye[2] * 1000).toString();
+      const ycoord = Math.round(-eye[2] * 1000).toString();
       console.log(xcoord, ycoord);
       setQuery(`
 PREFIX bot: <https://w3id.org/bot#>
@@ -25,7 +25,7 @@ WHERE {
     ?room geo:asWKT ?roomWKT .
     FILTER(STRSTARTS(STR(?roomWKT), "POLYGON"))
     FILTER(geof:sfWithin("POINT(${xcoord} ${ycoord})", ?roomWKT))
-    ?room bot:containsElement ?element .
+    ?room bot:containsElement|bot:adjacentElement ?element .
     
     ?element ?fog_geometry ?geometryData .
     BIND(DATATYPE(?geometryData) AS ?datatype)
@@ -36,5 +36,5 @@ WHERE {
 LIMIT 20
           `);
     }
-  }, 1000);
+  }, 2000);
 }

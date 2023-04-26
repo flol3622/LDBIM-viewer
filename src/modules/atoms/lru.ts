@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 const lruLimit = atom<number>({
   key: "lruLimit",
-  default: 20,
+  default: 30,
 });
 
 export default lruLimit;
