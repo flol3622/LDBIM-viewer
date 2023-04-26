@@ -1,37 +1,24 @@
-import TextareaAutosize from "@mui/base/TextareaAutosize";
-import { ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import {
   ArrowTopRightIcon,
   Cross1Icon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { autoMode, freezing, query } from "~/modules/atoms";
-import { QueryMode } from "~/modules/atoms/query";
-import { closeQuery } from "~/modules/atoms";
-import Divider from "./Divider";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { QueryMode, autoMode, closeQuery, freezing, query, uiQuery } from "~/modules/atoms";
 import Button from "./Button";
+import Divider from "./Divider";
+import QueryInput from "./Queryinput";
 
 export default function Querypannel() {
-  const [queryValue, setQuery] = useRecoilState(query);
   const [close, setClose] = useRecoilState(closeQuery);
-  const freezingValue = useRecoilValue(freezing);
   const [mode, setMode] = useRecoilState(autoMode);
-  const [tempUiQuery, setTempUiQuery] = useState("");
-
-  useEffect(() => {
-    setTempUiQuery(queryValue);
-  }, []);
+  const freezingValue = useRecoilValue(freezing);
+  const tempUiQuery = useRecoilValue(uiQuery);
+  const setQuery = useSetRecoilState(query);
 
   const updateQuery = () => {
     setQuery(tempUiQuery);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.shiftKey) {
-      updateQuery();
-    }
   };
 
   const handleMode = (_: React.MouseEvent, newMode: QueryMode) => {
@@ -42,38 +29,6 @@ export default function Querypannel() {
     setClose(!close);
   };
 
-  function QueryInput() {
-    if (mode === null) {
-      return (
-        <TextareaAutosize
-          minRows={4}
-          aria-label="maximum height"
-          placeholder="Write query"
-          defaultValue={tempUiQuery}
-          spellCheck="false"
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: "0.7rem",
-            opacity: freezingValue ? 0.3 : 1,
-          }}
-          disabled={freezingValue}
-          onChange={(e) => setTempUiQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-      );
-    } else {
-      return (
-        <p
-          className="text-blue whitespace-pre-wrap p-2 text-[0.7rem] opacity-50"
-          style={{ fontFamily: '"Fira code", "Fira Mono", monospace' }}
-        >
-          {queryValue}
-        </p>
-      );
-    }
-  }
   return (
     <>
       {!close && (

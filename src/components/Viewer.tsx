@@ -18,7 +18,7 @@ export default function ARViewer() {
 
   function test() {
     if (viewerRef.current) {
-      viewerRef.current.scene.camera.eye = [0, 30, 1];
+      viewerRef.current.scene.camera.eye = [5, 5, -5];
     }
   }
 

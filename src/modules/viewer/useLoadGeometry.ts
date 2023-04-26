@@ -18,7 +18,7 @@ async function loadGeometry(
         id: bindings.element.value,
         metadata: {
           format: bindings.fog_geometry.value,
-          datatype: bindings.geometryData.datatype.value,
+          datatype: bindings.datatype.value,
         },
       } as EntryLRU;
 
