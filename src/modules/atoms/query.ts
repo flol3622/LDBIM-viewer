@@ -16,7 +16,7 @@ where {
     FILTER(?datatype = xsd:anyURI)
 } 
 #ORDER BY (?element) (?fog_geometry)
-#LIMIT 20`,
+LIMIT 20`,
 });
 
 const uiQuery = atom<string>({

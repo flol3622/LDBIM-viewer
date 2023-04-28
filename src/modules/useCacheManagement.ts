@@ -24,28 +24,36 @@ export default function useCacheManagement(
 
   // clear the cache when the clean prop changes
   useEffect(() => {
-    LRU.current.clear();
+    LRU.current?.clear();
     console.log("cache cleared");
   }, [clean]);
 
   // call destroy function when an entry is removed from the cache
-  LRU.current.shift = function () {
-    let entry = LRUMap.prototype.shift.call(this);
-    // neeeds acccess to the viewer
-    viewer.current?.scene.models[entry?.[0]]?.destroy();
-    return entry;
-  };
+  // LRU.current.shift = function () {
+  //   let entry = LRUMap.prototype.shift.call(this);
+  //   // neeeds acccess to the viewer
+  //   viewer.current?.scene.models[entry?.[0]]?.destroy();
+  //   return entry;
+  // };
 
   function addLRU(entity: EntryLRU): void {
-    LRU.current.set(entity.id, entity.metadata);
+    LRU.current?.set(entity.id, entity.metadata);
   }
 
   // evaluate need to add to Viewer, move entity to head of LRU
   function evalLRU(entity: EntryLRU): boolean {
-    if (LRU.current.get(entity.id) === entity.metadata) return false;
+    if (LRU.current?.get(entity.id) === entity.metadata) return false;
     addLRU(entity);
     return true;
   }
 
-  return { evalLRU }; // to use when loading a new model
+  function syncViewer(): void {
+    const modelIds = viewer.current?.scene.modelIds;
+    if (!modelIds) return; // if no models
+    for (const id of modelIds) {
+      if (!LRU.current?.has(id)) viewer.current?.scene.models[id]?.destroy();
+    }
+  }
+
+  return { evalLRU, syncViewer }; // to use when loading a new model
 }

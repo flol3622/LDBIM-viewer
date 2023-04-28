@@ -1,16 +1,17 @@
+import { Viewer } from "@xeokit/xeokit-sdk";
 import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { endpoint, query } from "../atoms";
 import { getEntities, getGeometry } from "../fetchSPARQL";
 import useCacheManagement, { EntryLRU } from "../useCacheManagement";
 import { LoaderType } from "./useInitViewer";
-import { useRecoilValue } from "recoil";
-import { endpoint, query } from "../atoms";
-import { Viewer } from "@xeokit/xeokit-sdk";
 
 async function loadGeometry(
   query: string,
   endpoint: string,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>,
-  evalLRU: (entry: EntryLRU) => boolean
+  evalLRU: (entry: EntryLRU) => boolean,
+  syncViewer: () => void
 ) {
   await getEntities(query, endpoint, (bindings: any) => {
     try {
@@ -63,6 +64,8 @@ async function loadGeometry(
       console.error("Error loading geometry:", error);
     }
   });
+
+  syncViewer();
 }
 
 export default function useLoadGeometry(
@@ -71,12 +74,13 @@ export default function useLoadGeometry(
 ) {
   const queryValue = useRecoilValue(query);
   const endpointValue = useRecoilValue(endpoint);
-  const { evalLRU } = useCacheManagement(viewer);
+
+  const { evalLRU, syncViewer } = useCacheManagement(viewer);
 
   useEffect(() => {
     if (endpointValue) {
       // ensures no loading on first render
-      loadGeometry(queryValue, endpointValue, loaderTypes, evalLRU);
+      loadGeometry(queryValue, endpointValue, loaderTypes, evalLRU, syncViewer);
     }
   }, [endpointValue, queryValue]);
 }

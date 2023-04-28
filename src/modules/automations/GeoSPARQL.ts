@@ -21,20 +21,28 @@ PREFIX inst:<https://172.16.10.122:8080/projects/1001/>
 
 SELECT ?element ?fog_geometry ?datatype
 WHERE {
+  {
+    ?element geo:asWKT ?elementWKT .
+    FILTER(geof:sfWithin("POINT(${xcoord} ${ycoord})", ?elementWKT))
+  }
+  UNION
+  {
+    # elements in the room
     ?room rdf:type bot:Space .
     ?room geo:asWKT ?roomWKT .
-    FILTER(STRSTARTS(STR(?roomWKT), "POLYGON"))
     FILTER(geof:sfWithin("POINT(${xcoord} ${ycoord})", ?roomWKT))
-    ?room bot:containsElement|bot:adjacentElement ?element .
     
-    ?element ?fog_geometry ?geometryData .
-    BIND(DATATYPE(?geometryData) AS ?datatype)
-    FILTER NOT EXISTS { ?element rdf:type bot:Space }
-    FILTER(?fog_geometry IN (fog:asStl)) 
-    FILTER(?datatype = xsd:anyURI)
+    # get elements in the room
+    ?room bot:containsElement|bot:adjacentElement ?element .
+  }
+  FILTER NOT EXISTS { ?element rdf:type bot:Space }
+  ?element ?fog_geometry ?geometryData .
+  FILTER(?fog_geometry IN (fog:asStl)) 
+  BIND(DATATYPE(?geometryData) AS ?datatype)  
+  FILTER(?datatype = xsd:anyURI)
 } 
 LIMIT 20
           `);
     }
-  }, 2000);
+  }, 1000);
 }
