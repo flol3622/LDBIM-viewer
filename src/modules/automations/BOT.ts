@@ -1,9 +1,5 @@
 import { Viewer } from "@xeokit/xeokit-sdk";
-import { LRUMap } from "lru_map";
-
-interface LRUWithFilter extends LRUMap<string, any> {
-  filter(callback: (key: string) => boolean): string[];
-}
+import { LRUWithFilter } from "./useAutomations";
 
 function findRoom(viewer: Viewer, position: number[], lru: LRUWithFilter) {
   const down = [0, -1, 0];
@@ -28,3 +24,4 @@ function findRoom(viewer: Viewer, position: number[], lru: LRUWithFilter) {
 }
 
 export { findRoom };
+

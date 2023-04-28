@@ -7,13 +7,15 @@ PREFIX fog: <https://w3id.org/fog#>
 PREFIX omg: <https://w3id.org/omg#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-select ?element ?fog_geometry ?datatype
-where { 
-    ?element ?fog_geometry ?geometryData .
+select ?entity ?fog_geometry ?datatype ?botType
+where {
+    ?entity ?fog_geometry ?geometryData .
     BIND(datatype(?geometryData) AS ?datatype)
-    FILTER NOT EXISTS { ?element rdf:type bot:Space }
+    FILTER NOT EXISTS { ?entity rdf:type bot:Space }
     FILTER(?fog_geometry IN (fog:asStl)) 
     FILTER(?datatype = xsd:anyURI)
+    ?entity rdf:type ?botType .
+    FILTER(STRSTARTS(str(?botType), "https://w3id.org/bot#"))
 } 
 #ORDER BY (?element) (?fog_geometry)
 LIMIT 20`,

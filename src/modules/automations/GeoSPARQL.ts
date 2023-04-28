@@ -19,11 +19,11 @@ PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX inst:<https://172.16.10.122:8080/projects/1001/>
 
-SELECT ?element ?fog_geometry ?datatype
+SELECT ?entity ?fog_geometry ?datatype
 WHERE {
   {
-    ?element geo:asWKT ?elementWKT .
-    FILTER(geof:sfWithin("POINT(${xcoord} ${ycoord})", ?elementWKT))
+    ?entity geo:asWKT ?entityWKT .
+    FILTER(geof:sfWithin("POINT(${xcoord} ${ycoord})", ?entityWKT))
   }
   UNION
   {
@@ -33,10 +33,10 @@ WHERE {
     FILTER(geof:sfWithin("POINT(${xcoord} ${ycoord})", ?roomWKT))
     
     # get elements in the room
-    ?room bot:containsElement|bot:adjacentElement ?element .
+    ?room bot:containsElement|bot:adjacentElement ?entity .
   }
-  FILTER NOT EXISTS { ?element rdf:type bot:Space }
-  ?element ?fog_geometry ?geometryData .
+  FILTER NOT EXISTS { ?entity rdf:type bot:Space }
+  ?entity ?fog_geometry ?geometryData .
   FILTER(?fog_geometry IN (fog:asStl)) 
   BIND(DATATYPE(?geometryData) AS ?datatype)  
   FILTER(?datatype = xsd:anyURI)

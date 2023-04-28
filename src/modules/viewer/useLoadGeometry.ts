@@ -16,17 +16,18 @@ async function loadGeometry(
   await getEntities(query, endpoint, (bindings: any) => {
     try {
       const entry = {
-        id: bindings.element.value,
+        id: bindings.entity.value,
         metadata: {
           format: bindings.fog_geometry.value,
           datatype: bindings.datatype.value,
+          botType: bindings.bot_type?.value,
         },
       } as EntryLRU;     
       
 
       // cache management, stop if needed
       if (!evalLRU(entry)) throw new Error("Already in cache");
-      
+
       // else fetch geometry data
       const loaderType = loaderTypes.current?.[entry.metadata.format];
       getGeometry(entry.id, entry.metadata.format, endpoint)

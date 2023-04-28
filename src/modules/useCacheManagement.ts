@@ -8,6 +8,7 @@ import { Datatype, Format } from "./viewer/types";
 export type MetadataLRU = {
   format: Format;
   datatype: Datatype;
+  botType?: string;
 };
 export type EntryLRU = {
   id: string;
@@ -34,14 +35,10 @@ export default function useCacheManagement(
     console.log("cache cleared");
   }, [clean]);
 
-  function addLRU(entity: EntryLRU): void {
-    LRU.current?.set(entity.id, entity.metadata);
-  }
-
   // evaluate need to add to Viewer, move entity to head of LRU
   function evalLRU(entity: EntryLRU): boolean {
     if (LRU.current?.get(entity.id) === entity.metadata) return false;
-    addLRU(entity);
+    LRU.current?.set(entity.id, entity.metadata);
     return true;
   }
 
