@@ -1,7 +1,7 @@
 import { Viewer } from "@xeokit/xeokit-sdk";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { endpoint, query } from "../atoms";
+import { endpoint, lruLimit, query } from "../atoms";
 import { getEntities, getGeometry } from "../fetchSPARQL";
 import useCacheManagement, { EntryLRU } from "../useCacheManagement";
 import { LoaderType } from "./useInitViewer";
@@ -21,11 +21,12 @@ async function loadGeometry(
           format: bindings.fog_geometry.value,
           datatype: bindings.datatype.value,
         },
-      } as EntryLRU;
+      } as EntryLRU;     
+      
 
       // cache management, stop if needed
       if (!evalLRU(entry)) throw new Error("Already in cache");
-
+      
       // else fetch geometry data
       const loaderType = loaderTypes.current?.[entry.metadata.format];
       getGeometry(entry.id, entry.metadata.format, endpoint)
@@ -72,6 +73,7 @@ export default function useLoadGeometry(
   viewer: React.MutableRefObject<Viewer | undefined>,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>
 ) {
+  const limit = useRecoilValue(lruLimit)
   const queryValue = useRecoilValue(query);
   const endpointValue = useRecoilValue(endpoint);
 
@@ -82,5 +84,5 @@ export default function useLoadGeometry(
       // ensures no loading on first render
       loadGeometry(queryValue, endpointValue, loaderTypes, evalLRU, syncViewer);
     }
-  }, [endpointValue, queryValue]);
+  }, [endpointValue, queryValue, limit]);
 }

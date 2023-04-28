@@ -19,22 +19,20 @@ export default function useCacheManagement(
 ) {
   const clean = useRecoilValue(cleanStart);
   const limit = useRecoilValue(lruLimit);
+
+  const LRU = useRef<LRUMap<string, MetadataLRU>>();
   // initialize the LRU cache
-  const LRU = useRef<LRUMap<string, MetadataLRU>>(new LRUMap(limit));
+  useEffect(() => {
+    console.log("cache initialized");
+    LRU.current = new LRUMap(limit);
+    LRU.current.clear();
+  }, [limit]);
 
   // clear the cache when the clean prop changes
   useEffect(() => {
     LRU.current?.clear();
     console.log("cache cleared");
   }, [clean]);
-
-  // call destroy function when an entry is removed from the cache
-  // LRU.current.shift = function () {
-  //   let entry = LRUMap.prototype.shift.call(this);
-  //   // neeeds acccess to the viewer
-  //   viewer.current?.scene.models[entry?.[0]]?.destroy();
-  //   return entry;
-  // };
 
   function addLRU(entity: EntryLRU): void {
     LRU.current?.set(entity.id, entity.metadata);
