@@ -37,7 +37,15 @@ export default function useCacheManagement(
 
   // evaluate need to add to Viewer, move entity to head of LRU
   function evalLRU(entity: EntryLRU): boolean {
-    if (LRU.current?.get(entity.id) === entity.metadata) return false;
+    const lruValue = LRU.current?.get(entity.id);
+    if (lruValue != undefined) {
+      if (JSON.stringify(lruValue) != JSON.stringify(entity.metadata)) {
+        viewer.current?.scene.models[entity.id]?.destroy();
+        return true;
+      } else {
+        return false;
+      }
+    }
     LRU.current?.set(entity.id, entity.metadata);
     return true;
   }

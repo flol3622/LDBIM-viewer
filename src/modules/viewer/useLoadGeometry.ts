@@ -22,46 +22,46 @@ async function loadGeometry(
           datatype: bindings.datatype.value,
           botType: bindings.bot_type?.value,
         },
-      } as EntryLRU;     
-      
+      } as EntryLRU;
 
       // cache management, stop if needed
-      if (!evalLRU(entry)) throw new Error("Already in cache");
-
-      // else fetch geometry data
-      const loaderType = loaderTypes.current?.[entry.metadata.format];
-      getGeometry(entry.id, entry.metadata.format, endpoint)
-        .then((data) => {
-          // if the data is a literal, and is supported
-          if (
-            entry.metadata.datatype ===
-              "http://www.w3.org/2001/XMLSchema#string" &&
-            loaderType?.litParam
-          ) {
-            loaderType.loader.load({
-              ...loaderType.params,
-              id: entry.id,
-              [loaderType.litParam]: data,
-            });
-          }
-          // if the data is a uri, and is supported
-          else if (
-            entry.metadata.datatype ===
-              "http://www.w3.org/2001/XMLSchema#anyURI" &&
-            loaderType?.uriParam
-          ) {
-            loaderType.loader.load({
-              ...loaderType.params,
-              id: entry.id,
-              [loaderType.uriParam]: data,
-            });
-          }
-          // if the data source is not supported
-          else console.log("unsupported / undefined data source", entry.id);
-        })
-        .catch((error) => {
-          console.error("Error fetching geometry data:", error);
-        });
+      if (evalLRU(entry)) {
+        const loaderType = loaderTypes.current?.[entry.metadata.format];
+        getGeometry(entry.id, entry.metadata.format, endpoint)
+          .then((data) => {
+            // if the data is a literal, and is supported
+            if (
+              entry.metadata.datatype ===
+                "http://www.w3.org/2001/XMLSchema#string" &&
+              loaderType?.litParam
+            ) {
+              loaderType.loader.load({
+                ...loaderType.params,
+                id: entry.id,
+                [loaderType.litParam]: data,
+              });
+            }
+            // if the data is a uri, and is supported
+            else if (
+              entry.metadata.datatype ===
+                "http://www.w3.org/2001/XMLSchema#anyURI" &&
+              loaderType?.uriParam
+            ) {
+              loaderType.loader.load({
+                ...loaderType.params,
+                id: entry.id,
+                [loaderType.uriParam]: data,
+              });
+            }
+            // if the data source is not supported
+            else console.log("unsupported / undefined data source", entry.id);
+          })
+          .catch((error) => {
+            console.error("Error fetching geometry data:", error);
+          });
+      } else {
+        console.log("Already in cache");
+      }
     } catch (error) {
       console.error("Error loading geometry:", error);
     }
@@ -74,7 +74,7 @@ export default function useLoadGeometry(
   viewer: React.MutableRefObject<Viewer | undefined>,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>
 ) {
-  const limit = useRecoilValue(lruLimit)
+  const limit = useRecoilValue(lruLimit);
   const queryValue = useRecoilValue(query);
   const endpointValue = useRecoilValue(endpoint);
 
