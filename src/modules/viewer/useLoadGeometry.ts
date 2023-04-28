@@ -1,8 +1,8 @@
-import { Viewer } from "@xeokit/xeokit-sdk";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { endpoint, lruLimit, query } from "../atoms";
 import { getEntities, getGeometry } from "../fetchSPARQL";
+import { RefLRU, RefLoaderTypes, RefViewer } from "../refTypes";
 import useCacheManagement, { EntryLRU } from "../useCacheManagement";
 import { LoaderType } from "./useInitViewer";
 
@@ -71,14 +71,15 @@ async function loadGeometry(
 }
 
 export default function useLoadGeometry(
-  viewer: React.MutableRefObject<Viewer | undefined>,
-  loaderTypes: React.MutableRefObject<LoaderType | undefined>
+  viewer: RefViewer,
+  loaderTypes: RefLoaderTypes,
+  LRU: RefLRU
 ) {
   const limit = useRecoilValue(lruLimit);
   const queryValue = useRecoilValue(query);
   const endpointValue = useRecoilValue(endpoint);
 
-  const { evalLRU, syncViewer } = useCacheManagement(viewer);
+  const { evalLRU, syncViewer } = useCacheManagement(viewer, LRU);
 
   useEffect(() => {
     if (endpointValue) {

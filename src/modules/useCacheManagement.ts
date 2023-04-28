@@ -1,8 +1,8 @@
-import { Viewer } from "@xeokit/xeokit-sdk";
 import { LRUMap } from "lru_map";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { cleanStart, lruLimit } from "./atoms";
+import { RefLRU, RefViewer } from "./refTypes";
 import { Datatype, Format } from "./viewer/types";
 
 export type MetadataLRU = {
@@ -15,13 +15,10 @@ export type EntryLRU = {
   metadata: MetadataLRU;
 };
 
-export default function useCacheManagement(
-  viewer: React.MutableRefObject<Viewer | undefined>
-) {
+export default function useCacheManagement(viewer: RefViewer, LRU: RefLRU) {
   const clean = useRecoilValue(cleanStart);
   const limit = useRecoilValue(lruLimit);
 
-  const LRU = useRef<LRUMap<string, MetadataLRU>>();
   // initialize the LRU cache
   useEffect(() => {
     console.log("cache initialized");

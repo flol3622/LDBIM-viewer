@@ -1,7 +1,8 @@
 import { Viewer } from "@xeokit/xeokit-sdk";
+import { RefViewer } from "../refTypes";
 
 export default function GeoSPARQLauto(
-  viewer: React.MutableRefObject<Viewer | undefined>,
+  viewer: RefViewer,
   setQuery: (query: string) => void
 ): NodeJS.Timer {
   return setInterval(() => {

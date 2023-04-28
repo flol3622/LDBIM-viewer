@@ -8,6 +8,7 @@ import {
 import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { cleanStart, freezing } from "../atoms";
+import { RefLoaderTypes, RefViewer } from "../refTypes";
 
 export type LoaderType = {
   [key: string]: {
@@ -19,8 +20,8 @@ export type LoaderType = {
 };
 
 export default function useInitViewer(
-  viewer: React.MutableRefObject<Viewer | undefined>,
-  loaderTypes: React.MutableRefObject<LoaderType | undefined>
+  viewer: RefViewer,
+  loaderTypes: RefLoaderTypes
 ) {
   const clean = useRecoilValue(cleanStart);
   const setFreeze = useSetRecoilState(freezing);
