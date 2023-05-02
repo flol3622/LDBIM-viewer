@@ -45,6 +45,9 @@ export default function Querypannel() {
                 onChange={handleMode}
                 aria-label="Platform"
               >
+                <ToggleButton size="small" value="OBJ">
+                  OBJ
+                </ToggleButton>
                 <ToggleButton size="small" value="BOT">
                   BOT
                 </ToggleButton>

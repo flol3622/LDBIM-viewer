@@ -26,7 +26,7 @@ const uiQuery = atom<string>({
   default: "",
 });
 
-export type QueryMode = null | "BOT" | "GEO";
+export type QueryMode = null | "BOT" | "GEO" | "OBJ";
 
 const autoMode = atom<QueryMode>({
   key: "autoMode",
