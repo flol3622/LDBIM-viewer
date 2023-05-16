@@ -4,11 +4,13 @@ import { useRecoilValue } from "recoil";
 import { cleanStart, lruLimit } from "./atoms";
 import { RefLRU, RefViewer } from "./refTypes";
 import { Datatype, Format } from "./viewer/types";
+import { Console } from "console";
 
 export type MetadataLRU = {
   format: Format;
   datatype: Datatype;
   botType?: string;
+  [key: string]: string | undefined; // index signature to allow for additional properties
 };
 export type EntryLRU = {
   id: string;
@@ -35,13 +37,8 @@ export default function useCacheManagement(viewer: RefViewer, LRU: RefLRU) {
   // evaluate need to add to Viewer, move entity to head of LRU
   function evalLRU(entity: EntryLRU): boolean {
     const lruValue = LRU.current?.get(entity.id);
-    if (lruValue != undefined) {
-      if (JSON.stringify(lruValue) != JSON.stringify(entity.metadata)) {
-        viewer.current?.scene.models[entity.id]?.destroy();
-        return true;
-      } else {
-        return false;
-      }
+    if (lruValue !== undefined && JSON.stringify(lruValue) === JSON.stringify(entity.metadata)) {
+      return false;
     }
     LRU.current?.set(entity.id, entity.metadata);
     return true;
@@ -49,9 +46,18 @@ export default function useCacheManagement(viewer: RefViewer, LRU: RefLRU) {
 
   function syncViewer(): void {
     const modelIds = viewer.current?.scene.modelIds;
-    if (!modelIds) return; // if no models
+    if (!modelIds) return;
+
     for (const id of modelIds) {
-      if (!LRU.current?.has(id)) viewer.current?.scene.models[id]?.destroy();
+      const metadata = LRU.current?.get(id);
+      const model = viewer.current?.scene.models[id];
+
+      if (!metadata) {
+        model?.destroy();
+      } else if (metadata.color && model) {
+        const color: number[] = JSON.parse(metadata.color);
+        model.colorize = color;
+      }
     }
   }
 

@@ -11,7 +11,6 @@ async function loadGeometry(
   endpoint: string,
   loaderTypes: React.MutableRefObject<LoaderType | undefined>,
   evalLRU: (entry: EntryLRU) => boolean,
-  syncViewer: () => void
 ) {
   await getEntities(query, endpoint, (bindings: any) => {
     try {
@@ -21,6 +20,7 @@ async function loadGeometry(
           format: bindings.fog_geometry.value,
           datatype: bindings.datatype.value,
           botType: bindings.bot_type?.value,
+          "color": bindings.color?.value,
         },
       } as EntryLRU;
 
@@ -66,8 +66,6 @@ async function loadGeometry(
       console.error("Error loading geometry:", error);
     }
   });
-
-  syncViewer();
 }
 
 export default function useLoadGeometry(
@@ -84,7 +82,11 @@ export default function useLoadGeometry(
   useEffect(() => {
     if (endpointValue) {
       // ensures no loading on first render
-      loadGeometry(queryValue, endpointValue, loaderTypes, evalLRU, syncViewer);
+      const loadAndSync = async () => {
+        await loadGeometry(queryValue, endpointValue, loaderTypes, evalLRU);
+        syncViewer();
+      };
+      loadAndSync();
     }
   }, [endpointValue, queryValue, limit]);
 }
