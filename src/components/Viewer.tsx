@@ -32,9 +32,9 @@ export default function ARViewer() {
         className="fixed right-0 bottom-0 h-40 w-40"
         id="myNavCubeCanvas"
       ></canvas>
-      <button className="fixed top-24 left-0 z-10" onClick={test}>
+      {/* <button className="fixed top-24 left-0 z-10" onClick={test}>
         test
-      </button>
+      </button> */}
     </>
   );
 }

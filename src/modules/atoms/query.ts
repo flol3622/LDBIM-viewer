@@ -8,10 +8,12 @@ PREFIX omg: <https://w3id.org/omg#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX flupke: <https://flupke.archi/thesis/#>
+PREFIX prod: <https://w3id.org/product#>
 
 SELECT ?entity ?fog_geometry ?datatype ?botType ?color
 WHERE {
     ?entity ?fog_geometry ?geometryData .
+    # ?entity rdf:type prod:Window
     BIND(datatype(?geometryData) AS ?datatype)
     FILTER NOT EXISTS { ?entity rdf:type bot:Space }
     FILTER(?fog_geometry IN (fog:asStl)) 
@@ -19,7 +21,7 @@ WHERE {
     ?entity rdf:type ?botType .
     FILTER(STRSTARTS(str(?botType), "https://w3id.org/bot#"))
     # possible flupke:color property
-    OPTIONAL { ?entity flupke:color ?color }
+    # OPTIONAL { ?entity flupke:color ?color }
 } 
 #ORDER BY (?element) (?fog_geometry)
 LIMIT 20`,
