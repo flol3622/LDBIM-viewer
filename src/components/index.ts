@@ -1,3 +1,3 @@
 import Navbar from "./Navbar";
-import Querypannel from "./QueryPannel";
+import Querypannel from "./Querypannel";
 export { Navbar, Querypannel };
