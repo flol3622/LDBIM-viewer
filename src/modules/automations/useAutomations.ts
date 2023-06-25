@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { autoMode, query } from "~/modules/atoms";
 import { RefLRU, RefViewer } from "../refTypes";
+import BOTauto from "./BOT";
 import GeoSPARQLauto from "./GeoSPARQL";
 import OBJauto from "./OBJ";
 
@@ -17,7 +18,7 @@ export default function useAutomations(viewer: RefViewer, LRU: RefLRU): void {
         automation = GeoSPARQLauto(viewer, setQuery);
         break;
       case "BOT":
-        // BOTauto(viewer, setQuery);
+        automation = BOTauto(viewer, setQuery);
         break;
       case "OBJ":
         automation = OBJauto(viewer, setQuery);
@@ -32,4 +33,5 @@ export default function useAutomations(viewer: RefViewer, LRU: RefLRU): void {
   }, [mode]);
 }
 
-export {};
+export { };
+
