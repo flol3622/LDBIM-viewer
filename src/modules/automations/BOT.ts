@@ -28,7 +28,7 @@ function findRoom(viewer: RefViewer, position?: number[], lru?: RefLRU) {
   const resultDown = pick(down)?.entity?.id;
   const resultUp = pick(up)?.entity?.id;
 
-  return [resultDown, resultUp, position];
+  return [resultDown, resultUp];
 
   // if (resultDown?.entity === resultUp?.entity) {
   //   return resultDown?.entity?.id;
@@ -40,14 +40,12 @@ export default function BOTauto(
   setQuery: (query: string) => void
 ): NodeJS.Timer {
   return setInterval(() => {
-      const [resultDown, resultUp, position] = findRoom(viewer);
+      const [resultDown, resultUp] = findRoom(viewer);
       setQuery(`
 # bottom hit:
 # ${resultDown}
 # top hit:
 # ${resultUp}
-# position:
-# ${position}
 PREFIX bot: <https://w3id.org/bot#>
 PREFIX fog: <https://w3id.org/fog#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
