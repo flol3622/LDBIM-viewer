@@ -1,4 +1,3 @@
-import { Viewer } from "@xeokit/xeokit-sdk";
 import { RefViewer } from "../refTypes";
 
 export default function GeoSPARQLauto(
